@@ -1,0 +1,23 @@
+
+.animate-slide-enter {
+  opacity: 1;
+  transform: translate(120em);
+}
+
+.animate-slide-enter.animate-slide-enter-active {
+  opacity: 1;
+  transform: translate(0em);
+  transition: opacity 400ms ease-out, transform 1000ms ease-in;
+}
+
+.animate-slide-leave {
+  opacity: 1;
+  transition: opacity 400ms ease-out, transform 1000ms ease-in;
+}
+
+.animate-slide-leave.animate-slide-leave-active {
+  transform: translate(-120em);
+  opacity: 1;
+  transition: opacity 400ms ease-in, transform 1000ms ease-in;
+}
+

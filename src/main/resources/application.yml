@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: quantum
+  jackson:
+    default-property-inclusion: non_null
+    deserialization:
+      fail-on-unknown-properties: false
+
+security:
+  basic:
+    enabled: false
+
+quantum:
+  facebook:
+    appId: ${QUANTUM_FB_APP_ID}
+    appSecret: ${QUANTUM_FB_APP_SECRET}
+    accessToken: ${QUANTUM_FB_ACCESS_TOKEN}
+    page: ${QUANTUM_FB_PAGE:comhem}
+    fields: message,comments,properties,reactions,tags,picture,fullPicture,story,storyTags,whiteTags,place,link,name,to,from,icon,actions,sharesCount,statusType,attachments,parentId
+  twitter:
+    consumerKey: ${QUANTUM_TWITTER_CONSUMER_KEY}
+    consumerSecret: ${QUANTUM_TWITTER_CONSUMER_SECRET}
+    accessToken: ${QUANTUM_TWITTER_ACCESS_TOKEN}
+    accessTokenSecret: ${QUANTUM_TWITTER_ACCESS_TOKEN_SECRET}

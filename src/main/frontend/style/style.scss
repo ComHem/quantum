@@ -1,0 +1,71 @@
+@import "typography";
+@import "colors";
+@import "~font-awesome/css/font-awesome.css";
+
+$bigger_layout_percentage: 75%;
+$smaller_layout_percentage: 25%;
+
+*, *:before, *:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, .main {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background: $bg_color;
+}
+
+.container {
+  background: transparent;
+  height: 100%;
+}
+
+.main {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  flex-flow: row;
+  background: $bg_color;
+  border: 1px solid yellow;
+  width: $bigger_layout_percentage;
+  height: $smaller_layout_percentage;
+}
+
+.left--feed {
+  position: relative;
+  flex: 1 1 $bigger_layout_percentage;
+  height: $bigger_layout_percentage;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid red;
+}
+
+.right--feed {
+  flex: 1 1 $smaller_layout_percentage;
+  height: 100%;
+  box-sizing: border-box;
+  border: 1px solid blue;
+}
+
+.logo {
+  width: 150px;
+  height: 150px;
+  display: block;
+  margin: 0 auto;
+}

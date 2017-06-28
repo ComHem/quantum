@@ -37,3 +37,4 @@ src/main/frontend/node_modules
 bundle.js
 npm-debug.log
 /node_modules/
+*.lock

@@ -1,0 +1,15 @@
+@import "~leaflet/dist/leaflet.css";
+@import "colors";
+
+.leaflet-container {
+  top: 0;
+  position: absolute;
+  display: block;
+  height: 100%;
+  width: 25%;
+  background: $bg_color;
+}
+
+.map-marker-icon {
+  background: url('~leaflet/dist/images/marker-icon.png');
+}
