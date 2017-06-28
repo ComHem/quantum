@@ -1,13 +1,20 @@
-# Spring Boot and React starter app
+# Quantum
 
 > Quantum webapp using Spring Boot on the backend and React on the frontend, with 
 Maven and Webpack as build tools, hot reloading on both sides and without xml configuration.
-## Docker 
 
-#Build
+## Status
+
+Travis CI:
+
+[![Build Status](https://travis-ci.org/ComHem/quantum.svg?branch=master)](https://travis-ci.org/ComHem/quantum)
+
+## Docker
+
+#### Build
 docker build . -t quantum
 
-#start
+#### Start
 docker run --rm --name quantum -p 8080:8080 quantum
 
 ## Quickstart
