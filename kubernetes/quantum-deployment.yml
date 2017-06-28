@@ -1,0 +1,58 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: quantum-deployment
+spec:
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: quantum
+    spec:
+      containers:
+      - name: quantum
+        image: mimerdevcontainerregistry.azurecr.io/quantum:v2
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always
+        env:
+        - name: QUANTUM_FB_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: quantum-secrets
+              key: QUANTUM_FB_APP_ID
+        - name: QUANTUM_FB_APP_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: quantum-secrets
+              key: QUANTUM_FB_APP_SECRET
+        - name: QUANTUM_FB_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: quantum-secrets
+              key: QUANTUM_FB_ACCESS_TOKEN
+        - name: QUANTUM_TWITTER_CONSUMER_KEY
+          valueFrom:
+            secretKeyRef:
+              name: quantum-secrets
+              key: QUANTUM_TWITTER_CONSUMER_KEY
+        - name: QUANTUM_TWITTER_CONSUMER_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: quantum-secrets
+              key: QUANTUM_TWITTER_CONSUMER_SECRET
+        - name: QUANTUM_TWITTER_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: quantum-secrets
+              key: QUANTUM_TWITTER_ACCESS_TOKEN
+        - name: QUANTUM_TWITTER_ACCESS_TOKEN_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: quantum-secrets
+              key: QUANTUM_TWITTER_ACCESS_TOKEN_SECRET
