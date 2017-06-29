@@ -3,6 +3,9 @@
 > Quantum webapp using Spring Boot on the backend and React on the frontend, with 
 Maven and Webpack as build tools, hot reloading on both sides and without xml configuration.
 
+## Production
+
+App can be reached here --> http://52.166.144.86/
 ## Status
 
 Travis CI:
@@ -27,12 +30,6 @@ To check everything is running you can:
 
     # Visit the homepage
     http://localhost:8080
-    
-    # Go to the sample REST endpoint
-    http://localhost:8080/api/users
-    
-    # Login to the H2 console (JDBC URL: 'jdbc:h2:mem:embedded', user = 'h2')
-    http://localhost:8080/h2-console
 
 ## Start developing
 The Java code is available at `src/main/java` as usual, and the frontend files are in 
@@ -74,17 +71,6 @@ You can find the profile constants in
 [StarterProfiles](src/main/java/com/dlizarra/starter/StarterProfiles.java) 
 and the properties files in `src/main/resources`.
 
-### Database
-The database connections are configured in 
-[DatabaseConfig](src/main/java/com/dlizarra/starter/DatabaseConfig.java)
-where we can find a working H2 embedded database connection for the default profile, and the staging and production configurations examples for working with an external database.
-
-### Repository layer
-The project includes three base data repositories:
-
-- [ReadOnlyRepository](src/main/java/com/dlizarra/starter/support/jpa/ReadOnlyRepository.java): We can use this base repository when we want to make sure the application doesn't insert or update that type of entity, as it just exposes a set of methods to read entities.
-- [CustomCrudRepository](src/main/java/com/dlizarra/starter/support/jpa/CustomCrudRepository.java): It's the same as the `CrudRepository` that Spring Data provides, but the `findOne`method in the custom version returns a Java 8 `Optional<T>` object instead of `<T>`. It's just a small difference but it avoids having to override the `findOne` method in every repository to make it return an `Optional` object. This repository is intended to be used when we don't need paging or sorting capabilities for that entity.
-- [CustomJpaRepository](src/main/java/com/dlizarra/starter/support/jpa/CustomJpaRepository.java): Again, it's there to provide the same funcionality as the Spring `JpaRepository` but returning `Optional<T>`. We can extend this base repository if we want CRUD operations plus paging and sorting capabilities.
 
 ### Security
 All the boilerplate for the initial Spring Security configuration is already created. These are they key classes:
@@ -93,13 +79,6 @@ All the boilerplate for the initial Spring Security configuration is already cre
 - [CustomUserDetails](src/main/java/com/dlizarra/starter/support/security/CustomUserDetails.java)
 - [CustomUserDetailsService](src/main/java/com/dlizarra/starter/support/security/CustomUserDetailsService.java)
 - [SecurityConfig](src/main/java/com/dlizarra/starter/SecurityConfig.java) with just very basic security rules.
-
-### DTO-Entity mapping
-The project includes Orika and it already has a class, [OrikaBeanMapper](src/main/java/com/dlizarra/starter/support/orika/OrikaBeanMapper.java), ready to be injected anywhere and be used to do any mapping. It will also scan the project on startup searching for custom mappers and components.
-
-You can see how to use it in [UserServiceImpl](src/main/java/com/dlizarra/starter/user/UserServiceImpl.java) or in this sample [project](https://github.com/dlizarra/orika-spring-integration).
-
-This, along with Lombok annotations for auto-generating getters, setters, toString methods and such, allows us to have much cleaner Entities and DTOs classes.
 
 ### Unit and integration testing
 For **unit testing** we included Spring Test, JUnit, Mockito and AssertJ as well as an [AbstractUnitTest](src/test/java/com/dlizarra/starter/support/AbstractUnitTest.java) class that we can extend to include the boilerplate annotations and configuration for every test. [UserServiceTest](src/test/java/com/dlizarra/starter/user/UserServiceTest.java) can serve as an example.
