@@ -1,6 +1,5 @@
 @import "colors";
 
-
 .message-container {
   align-items: center;
   flex-direction: column;
@@ -14,50 +13,38 @@
 }
 
 .message--item {
-  border: 3px solid $border_color;
-  text-align: left;
-  width: 100%;
+  position: absolute;
 }
 
-.message--item__single {
-  max-width: 750px;
+.message--item__single--content {
+  padding: 15px;
+  background: $color_white;
+}
+
+.message--item__thread, .message--item__single {
+  max-width: 900px;
   min-width: 500px;
   display: flex;
   flex-direction: column;
-  margin: 30px;
-  color: #333;
+  margin-top: 15px;
+  color: $color_black;
   text-align: left;
   font-size: 14px;
 }
 
-.message--item__single--content {
-  box-shadow: 0 0 10px 0 rgba(10, 10, 10, 0.2);
-  padding: 15px;
-  background: #fff;
+.message-thread__children--container {
+  background-color: fade_out(darken($color_white, 20%), 0.5);
 }
 
-.message--item__thread {
-  max-width: 900px;
-  min-width: 500px;
-  height: 900px;
-  overflow: scroll;
+.thread-replies {
+  padding: 10px;
+  border-bottom: 1px dashed fade_in($comhem_color_4, 0.8);
+  .thread__message {
+    padding: 5px;
+  }
+}
 
 
-}
-img {
-  width: 100%;
-  width: auto \9;
-  height: auto;
-  border: 0;
-  vertical-align: middle;
-  -ms-interpolation-mode: bicubic;
-}
-.message-thread__children--container{
-  background-color: #e6e6e6;
-}
-.thread__message{
-  padding:15px;
-}
 .message--body--text {
   padding: 15px;
   font-size: 20px;
@@ -96,59 +83,6 @@ img {
   display: inline-block;
   width: 60px;
   height: 34px;
-}
-
-/* Hide default HTML checkbox */
-.switch input {
-  display: none;
-}
-
-/* The slider */
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
 }
 
 /* TODO: FIX OWN CLASS */

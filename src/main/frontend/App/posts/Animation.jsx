@@ -6,14 +6,12 @@ export default class Animation extends PureComponent {
     render() {
         return (
             <CSSTransitionGroup
-                className="anka"
                 transitionName='animate-slide'
                 transitionEnter={true}
                 transitionLeave={true}
+                component="div"
                 transitionEnterTimeout={1000}
-                transitionLeaveTimeout={1000}
-                component='div'>
-                {this.props.children}
+                transitionLeaveTimeout={1000}>{this.props.children}
             </CSSTransitionGroup>
         );
     }
