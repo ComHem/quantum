@@ -1,7 +1,7 @@
 {
   "name": "frontend",
   "version": "1.0.0",
-  "description": "Starter app ",
+  "description": "Quantum app",
   "main": "index.js",
   "scripts": {
     "build": "webpack",

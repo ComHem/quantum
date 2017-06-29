@@ -1,23 +1,39 @@
-
-.animate-slide-enter {
+.staticState {
   opacity: 1;
-  transform: translate(120em);
+  transform: translateY(0%);
+  border: 2px solid red;
 }
 
-.animate-slide-enter.animate-slide-enter-active {
-  opacity: 1;
-  transform: translate(0em);
-  transition: opacity 400ms ease-out, transform 1000ms ease-in;
+.animate-slide-enter, .animate-slide, .animate-slide-appear, .animate-slide-leave, .animate-slide-leave-active {
+  > div {
+    border: 2px solid red;
+    transition: all 0.6s ease;
+  }
+}
+
+.animate-slide-enter, .animate-slide-appear {
+  > div {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  &.animate-slide-enter-active {
+    > div {
+      @extend .staticState
+    }
+  }
 }
 
 .animate-slide-leave {
-  opacity: 1;
-  transition: opacity 400ms ease-out, transform 1000ms ease-in;
-}
+  > div {
+    @extend .staticState
+  }
 
-.animate-slide-leave.animate-slide-leave-active {
-  transform: translate(-120em);
-  opacity: 1;
-  transition: opacity 400ms ease-in, transform 1000ms ease-in;
+  &.animate-slide-leave-active {
+    > div {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+  }
 }
 
