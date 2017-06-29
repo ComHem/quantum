@@ -1,12 +1,11 @@
-package se.comhem.quantum.facebook;
+package se.comhem.quantum.feed.facebook;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import se.comhem.quantum.feed.FeedDto;
 
 @RestController
 @RequestMapping(
@@ -18,7 +17,8 @@ public class FacebookController {
     private FacebookClient facebookClient;
 
     @GetMapping
-    public List<FacebookPost> findPosts() {
+    public FeedDto findPosts() {
+
         return facebookClient.getLatestPosts(5);
     }
 }

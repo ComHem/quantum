@@ -13,5 +13,4 @@ import java.util.List;
 public class FeedDto {
     List<PostDto> threads;
     List<PostDto> singles;
-
 }
