@@ -7,6 +7,7 @@ import se.comhem.quantum.feed.twitter.PostDto;
 import se.comhem.quantum.feed.twitter.TwitterService;
 import twitter4j.TwitterException;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -33,6 +34,8 @@ public class FeedService {
         List<PostDto> mergedThreads = facebookFeed.getThreads();
         twitterFeeds.getSingles().forEach(mergedSingles::add);
         twitterFeeds.getThreads().forEach(mergedThreads::add);
+        Collections.shuffle(mergedSingles);
+        Collections.shuffle(mergedThreads);
         return FeedDto.builder()
                 .singles(mergedSingles)
                 .threads(mergedThreads).build();
