@@ -19,13 +19,13 @@ export default class ThreadMessage extends PureComponent {
                         <div className="message--body--wrapper">
                             <p className="message--body--text">
                                 {this.props.post.message}
-                                <a>
-                                    <img  src={this.props.post.contentLink}/>
-                                </a>
+
                             </p>
                         </div>
                     </div>
-
+                    <a>
+                        <img  src={this.props.post.contentLink}/>
+                    </a>
                     <div className="message-thread__children--container">{this.props.post.replies.map((post, j) => {
                         return (
                             <ThreadReplies key={j} post={post}/>

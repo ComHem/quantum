@@ -39,12 +39,18 @@
 .message--item__thread {
   max-width: 900px;
   min-width: 500px;
-  display: flex;
-  flex-direction: column;
-  margin: 30px;
-  color: #333;
-  text-align: left;
-  font-size: 14px;
+  height: 900px;
+  overflow: scroll;
+
+
+}
+img {
+  width: 100%;
+  width: auto \9;
+  height: auto;
+  border: 0;
+  vertical-align: middle;
+  -ms-interpolation-mode: bicubic;
 }
 .message-thread__children--container{
   background-color: #e6e6e6;
