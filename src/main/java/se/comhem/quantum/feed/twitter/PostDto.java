@@ -18,6 +18,7 @@ public class PostDto {
     String messageImg;
     String author;
     String autorImg;
+    String contentLink;
     List<PostDto> replies;
     List <Double>location;
     String city;

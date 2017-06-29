@@ -1,9 +1,6 @@
 package se.comhem.quantum.feed.facebook;
 
-import facebook4j.Facebook;
-import facebook4j.FacebookException;
-import facebook4j.Ordering;
-import facebook4j.Reading;
+import facebook4j.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +8,9 @@ import org.springframework.stereotype.Service;
 import se.comhem.quantum.feed.FeedDto;
 import se.comhem.quantum.feed.twitter.PostDto;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -61,13 +60,20 @@ public class FacebookClient {
                     .stream()
                     .map(post -> PostDto.builder()
                             .message(post.getMessage())
+                            .autorImg(getProfilePicPath(post))
                             .plattform("facebook")
-                            .author(post.getName())
-                            .autorImg(post.getPicture().getPath())
+                            .contentLink(post.getAttachments().get(0).getUrl())
+                            .date(Optional.ofNullable(post.getCreatedTime())
+                                    .map(Date::toString)
+                                    .orElse(""))
+                            .author(post.getFrom().getName())
                             .replies(post.getComments().stream()
                                     .map(comment -> PostDto.builder()
                                             .message(comment.getMessage())
                                             .author(comment.getFrom().getName())
+                                            .date(Optional.ofNullable(comment.getCreatedTime())
+                                                    .map(Date::toString)
+                                                    .orElse(""))
                                             .build())
                                     .collect(toList()))
                             .build())
@@ -76,5 +82,14 @@ public class FacebookClient {
             log.error("Exception from Facebook: ", e);
             throw new RuntimeException(e);
         }
+    }
+
+    private String getProfilePicPath(Post post) {
+        try {
+            return facebook.getPictureURL(post.getFrom().getId()).toString();
+        } catch (FacebookException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
