@@ -38,3 +38,6 @@ bundle.js
 npm-debug.log
 /node_modules/
 *.lock
+
+# Secrets
+.key
