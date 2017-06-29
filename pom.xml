@@ -111,7 +111,15 @@
                         <goals>
                             <goal>install-node-and-yarn</goal>
                         </goals>
-                        <configuration></configuration>
+                        <phase>generate-resources</phase>
+                    </execution>
+
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
                     </execution>
 
                     <execution>
