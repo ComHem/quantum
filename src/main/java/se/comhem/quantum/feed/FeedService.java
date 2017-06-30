@@ -3,7 +3,6 @@ package se.comhem.quantum.feed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.comhem.quantum.feed.facebook.FacebookClient;
-import se.comhem.quantum.feed.twitter.PostDto;
 import se.comhem.quantum.feed.twitter.TwitterService;
 import twitter4j.TwitterException;
 

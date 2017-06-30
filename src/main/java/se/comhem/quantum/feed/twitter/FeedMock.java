@@ -1,6 +1,7 @@
 package se.comhem.quantum.feed.twitter;
 
 import se.comhem.quantum.feed.FeedDto;
+import se.comhem.quantum.feed.PostDto;
 
 import java.util.Collections;
 

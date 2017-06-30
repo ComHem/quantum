@@ -3,6 +3,7 @@ package se.comhem.quantum.feed.twitter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.comhem.quantum.feed.FeedDto;
+import se.comhem.quantum.feed.PostDto;
 import twitter4j.*;
 
 import java.util.ArrayList;
@@ -25,10 +26,8 @@ public class TwitterService {
 
     public FeedDto getTweets() throws TwitterException {
         return FeedMock.getFeedDtoMOCK();
-//        QueryResult result = fetchData();
-//
-//        FeedDto feed = mapToFeed(result);
-//        return feed;
+//        QueryResult result = fetchD
+
     }
 
     private QueryResult fetchData() throws TwitterException {

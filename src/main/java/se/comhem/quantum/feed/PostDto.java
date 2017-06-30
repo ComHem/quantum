@@ -1,4 +1,4 @@
-package se.comhem.quantum.feed.twitter;
+package se.comhem.quantum.feed;
 
 import lombok.*;
 
