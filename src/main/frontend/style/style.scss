@@ -35,18 +35,6 @@ body {
   justify-content: space-around;
 }
 
-/*footer {*/
-  /*position: absolute;*/
-  /*left: 0;*/
-  /*bottom: 0;*/
-  /*display: flex;*/
-  /*flex-flow: row;*/
-  /*background: $bg_color;*/
-  /*//border: 1px solid yellow;*/
-  /*width: $bigger_layout_percentage;*/
-  /*height: $smaller_layout_percentage;*/
-/*}*/
-
 .left--feed {
   position: relative;
   flex: 1 0 $bigger_layout_percentage;
@@ -54,14 +42,25 @@ body {
   box-sizing: border-box;
   padding: 10px;
   overflow: hidden;
-  //border: 1px solid red;
+  z-index: 2;
 }
 
 .right--feed {
   flex: 1 0 $smaller_layout_percentage;
   height: 100%;
   box-sizing: border-box;
-  //border: 1px solid blue;
+}
+
+.background-overlay-color {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right:0;
+  width: 100%;
+  height: 100%;
+  background: rgba(200, 200, 200, 0.25);
+  z-index: 1;
 }
 
 .logo {

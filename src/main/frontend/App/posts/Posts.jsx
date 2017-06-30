@@ -3,7 +3,7 @@ import _ from 'lodash';
 import '../../style/posts.scss';
 import '../../style/animate.scss';
 import Animation from './Animation'
-import SingleMessage from './message/Message';
+import Message from './message/Message';
 
 export default class Posts extends PureComponent {
     constructor(props) {
@@ -46,7 +46,7 @@ export default class Posts extends PureComponent {
             <div className="posts-container">
                 <Animation>
                     {this.props.posts && this.props.posts.map((post, i) => (
-                        <SingleMessage key={Date.now() + i}
+                        <Message key={Date.now() + i}
                                        post={post}
                                        type={this.props.type}
                                        getPlatformIcon={this.getPlatformIcon}/>
