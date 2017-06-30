@@ -26,8 +26,10 @@ public class TwitterService {
 
     public FeedDto getTweets() throws TwitterException {
         return FeedMock.getFeedDtoMOCK();
-//        QueryResult result = fetchD
-
+//        QueryResult result = fetchData();
+//
+//        FeedDto feed = mapToFeed(result);
+//        return feed;
     }
 
     private QueryResult fetchData() throws TwitterException {
