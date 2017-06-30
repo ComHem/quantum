@@ -21,7 +21,7 @@ export class MapBackground extends Component {
     render() {
         const icon = divIcon({
             className: 'map-marker-icon',
-            iconSize: [12, 20]
+            iconSize: [25, 41]
         });
 
 

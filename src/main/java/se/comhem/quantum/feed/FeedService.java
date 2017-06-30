@@ -32,8 +32,8 @@ public class FeedService {
         FeedDto f = new FeedDto();
         List<PostDto> mergedSingles = facebookFeed.getSingles();
         List<PostDto> mergedThreads = facebookFeed.getThreads();
-//        twitterFeeds.getSingles().forEach(mergedSingles::add);
-//        twitterFeeds.getThreads().forEach(mergedThreads::add);
+        twitterFeeds.getSingles().forEach(mergedSingles::add);
+        twitterFeeds.getThreads().forEach(mergedThreads::add);
         Collections.shuffle(mergedSingles);
         Collections.shuffle(mergedThreads);
         return FeedDto.builder()

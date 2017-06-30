@@ -6,9 +6,11 @@ export default class SingleMessage extends PureComponent{
             <div className="message--item message--item__single">
                 <div className="message--item__single--content">
                     <a className="author--icon__pull-left" href="http://twitter.com/ComHemAB">
-                        <img className="author-icon" src={this.props.post.autorImg}/>
+                        <img className="author-icon" src={this.props.post.authorImg}/>
                     </a>
-
+                    <a >
+                        <span>{this.props.post.plattform}</span>
+                    </a>
                     <div className="message--item--body__single">
                         <p>
                             <span className="author-title">{this.props.post.author}</span>

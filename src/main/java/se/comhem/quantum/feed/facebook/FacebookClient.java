@@ -60,7 +60,7 @@ public class FacebookClient {
                     .stream()
                     .map(post -> PostDto.builder()
                             .message(post.getMessage())
-                            .autorImg(getProfilePicPath(post))
+                            .authorImg(getProfilePicPath(post))
                             .plattform("facebook")
                             .contentLink(post.getAttachments().get(0).getUrl())
                             .date(Optional.ofNullable(post.getCreatedTime())

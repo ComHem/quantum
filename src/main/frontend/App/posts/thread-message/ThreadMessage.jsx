@@ -7,10 +7,11 @@ export default class ThreadMessage extends PureComponent {
             <div className="message--item message--item__thread">
                 <div className="message--item__single--content">
                     <a className="author--icon__pull-left" href="http://twitter.com/ComHemAB">
-                        <img className="author-icon" src={this.props.post.autorImg}/>
+                        <img className="author-icon" src={this.props.post.authorImg}/>
                     </a>
-
-
+                    <a >
+                        <span>{this.props.post.plattform}</span>
+                    </a>
                     <div className="message--item--body__single">
                         <p>
                             <span className="author-title">{this.props.post.author}</span>
@@ -19,19 +20,19 @@ export default class ThreadMessage extends PureComponent {
                         <div className="message--body--wrapper">
                             <p className="message--body--text">
                                 {this.props.post.message}
-
                             </p>
                         </div>
                     </div>
                     <a>
                         <img  src={this.props.post.contentLink}/>
                     </a>
-                    <div className="message-thread__children--container">{this.props.post.replies.map((post, j) => {
-                        return (
-                            <ThreadReplies key={j} post={post}/>
-                        );
-                    })}</div>
+
                 </div>
+                  <div className="message-thread__children--container">{this.props.post.replies.map((post, j) => {
+                    return (
+                        <ThreadReplies key={j} post={post}/>
+                    );
+                })}</div>
             </div>
         );
     }
