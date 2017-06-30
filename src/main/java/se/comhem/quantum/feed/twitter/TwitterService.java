@@ -31,8 +31,8 @@ public class TwitterService {
             QueryResult result = fetchData();
             feed = mapToFeed(result);
 
-        } catch (TwitterException e) {
-            Logger.getLogger(TwitterService.class).error("e");
+        } catch (TwitterException exception) {
+            Logger.getLogger(TwitterService.class).warn(exception.getMessage());
         }
         return feed;
     }
