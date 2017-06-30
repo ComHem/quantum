@@ -22,7 +22,6 @@ public class TwitterService {
     }
 
     public FeedDto getTweets() {
-//        return FeedMock.getFeedDtoMOCK();
         FeedDto feed = new FeedDto();
         try {
             QueryResult result = fetchData();
