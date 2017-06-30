@@ -13,16 +13,16 @@ export default class Message extends PureComponent {
             <div className={`message--item message--item__${this.type} ${this.props.post.plattform.toLowerCase()}`}>
                 <div className={`message--item__single--content`}>
                     <div className="author--icon__container">
-                    <a className="author--icon__pull-left" href="http://twitter.com/ComHemAB">
-                        <img className="author-icon" src={this.props.post.authorImg}/>
-                        <div className="message--item--platform-icon">{this.props.getPlatformIcon(this.props.post.plattform)}</div>
-                    </a>
+                        <div className="author--icon__pull-left">
+                            <img className="author-icon" src={this.props.post.authorImg}/>
+                            <div className="message--item--platform-icon">{this.props.getPlatformIcon(this.props.post.plattform)}</div>
+                        </div>
+                        <div className="message--item__description">
+                            <p className="author-title">{this.props.post.author}</p>
+                            <p className="date__pull-right">{this.props.post.date}</p>
+                        </div>
                     </div>
                     <div className={`message--item--body__single`}>
-                        <p>
-                            <span className="author-title">{this.props.post.author}</span>
-                            <span className="date__pull-right">{this.props.post.date}</span>
-                        </p>
                         <div className="message--body--wrapper">
                             <p className="message--body--text">
                                 {this.props.post.message}
@@ -33,11 +33,11 @@ export default class Message extends PureComponent {
                 </div>
 
                 {this.props.post.replies &&
-                  <div className="message-thread__children--container">{this.props.post.replies.map((post, j) => {
-                        return (
-                            <ThreadReplies key={j} post={post}/>
-                        );
-                    })}</div>
+                <div className="message-thread__children--container">{this.props.post.replies.map((post, j) => {
+                    return (
+                        <ThreadReplies key={j} post={post}/>
+                    );
+                })}</div>
                 }
 
             </div>
