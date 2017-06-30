@@ -10,12 +10,14 @@ export default class Message extends PureComponent {
 
     render() {
         return (
-            <div className={`message--item message--item__${this.type}`}>
+            <div className={`message--item message--item__${this.type} ${this.props.post.plattform.toLowerCase()}`}>
                 <div className={`message--item__single--content`}>
+                    <div className="author--icon__container">
                     <a className="author--icon__pull-left" href="http://twitter.com/ComHemAB">
                         <img className="author-icon" src={this.props.post.authorImg}/>
+                        <div className="message--item--platform-icon">{this.props.getPlatformIcon(this.props.post.plattform)}</div>
                     </a>
-                    <div>{this.props.getPlatformIcon(this.props.post.plattform)}</div>
+                    </div>
                     <div className={`message--item--body__single`}>
                         <p>
                             <span className="author-title">{this.props.post.author}</span>
