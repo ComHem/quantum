@@ -71,11 +71,10 @@
 
   .thread-replies {
     padding: 10px;
-    border-top: 1px solid fade_out($bg_color, 0.8);
+    border-top: 1px solid fade_out($bg_color, 0.5);
 
     .thread__message {
       padding: 5px;
-      border-bottom: 1px solid fade_out($bg_color, 0.8);
     }
 
   }
@@ -95,34 +94,44 @@
   .author--icon__container {
     display: block;
     position: relative;
-    width: 70px;
-    
+    width: 100%;
+
+    .author--icon__pull-left {
+      width: 70px;
+      display: inline-block;
+    }
+
     .author-icon {
       display: block;
       width: 70px;
       border-radius: 50%;
+      box-shadow: -3px 3px 10px rgba(0, 0, 0, 0.2);
     }
 
     .message--item--platform-icon {
       position: absolute;
-      bottom: 0;
-      right: 0;
+      top: 0;
+      left: -40px;
       font-size: 15pt;
+    }
+
+    .message--item__description {
+      margin-left: 15px;
+      display: inline-block;
+      position: absolute;
+      top: 0;
+
+      .author-title {
+        display: inline-block;
+      }
+      .date__pull-right {
+        color: #91b594;
+      }
     }
   }
 
-  .author-title {
-    font-size: large;
-  }
-
-  .date__pull-right {
-    color: #91b594;
-    margin-left: 10px;
-    float: right;
-  }
-
   .message--body--wrapper {
-    margin-left: 80px;
+    padding: 0 20px;
     color: #666;
   }
 
