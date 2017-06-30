@@ -17,7 +17,7 @@ export default class Posts extends PureComponent {
     }
 
     componentDidMount() {
-        this.timer = setInterval(this.displayNewPosts, 6000);
+        this.timer = setInterval(this.displayNewPosts, 12000);
         this.props.fetchFeed();
     }
 
