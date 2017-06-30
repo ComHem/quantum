@@ -37,7 +37,7 @@ public class TwitterService {
     private QueryResult fetchData() throws TwitterException {
         Query query = new Query("#comhem OR #comhemab OR @comhemab OR @comhem to:comhemab -filter:retweets").resultType(Query.ResultType.recent);
 
-        query.count(10);
+        query.count(100);
         return twitter.search(query);
     }
 
@@ -70,7 +70,7 @@ public class TwitterService {
                         .location(getGeo(status))
                         .id(status.getId())
                         .plattform("TWITTER")
-                        .replies(getReplies(status))
+//                        .replies(getReplies(status))
                         .build())
                 .collect(Collectors.toList());
     }
