@@ -16,6 +16,7 @@ public class FeedController {
 
     @RequestMapping(value = "/api/feed", method = RequestMethod.GET)
     public FeedDto findFeed() throws TwitterException {
+        System.out.println("feedfetched!");
         return feedService.getFeed();
     }
 }

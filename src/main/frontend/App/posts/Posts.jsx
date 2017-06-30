@@ -33,8 +33,6 @@ export default class Posts extends PureComponent {
             this.props.latestFeed(randomTypes[0]);
         } else if (this.props[randomTypes[1].type].length >= randomTypes[1].displayCount) {
             this.props.latestFeed(randomTypes[1]);
-        } else {
-            // fetch new from server
         }
     };
 
@@ -55,8 +53,8 @@ export default class Posts extends PureComponent {
     }
 
     fetchWhenEmpty(type) {
-        if (this.props[type.type].length >= type.displayCount) {
-            this.props.fetchFeed(type)
+        if (this.props[type.type].length <= type.displayCount) {
+            this.props.fetchFeed()
         }
     }
 }

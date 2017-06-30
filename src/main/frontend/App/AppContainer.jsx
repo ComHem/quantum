@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import {App} from './App';
-import {fetchFeed, getNewRows} from './Actions';
+import {getNewRows} from './Actions';
 
 const mapStateToProps = (state, ownProps) => ({
 });
