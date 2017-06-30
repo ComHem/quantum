@@ -10,6 +10,7 @@ import se.comhem.quantum.feed.Mapper;
 import se.comhem.quantum.feed.PostDto;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -36,19 +37,32 @@ public class FacebookClient {
     }
 
 
-
     private List<PostDto> fetchPosts(int numberOfPosts) {
         try {
-            return facebook.getPosts(page, new Reading()
+            ResponseList<Post> posts = facebook.getPosts(page, new Reading()
                     .limit(numberOfPosts)
                     .order(Ordering.REVERSE_CHRONOLOGICAL)
-                    .fields(fields))
-                    .stream()
-                    .map(post -> Mapper.mapFacebookPostToPostDto(getProfilePicPath(post), post))
+                    .fields(fields));
+            return posts.stream()
+                    .map(post -> Mapper.mapFacebookPostToPostDto(getCommentLocations(post), getProfilePicPath(post), post))
                     .collect(toList());
         } catch (FacebookException e) {
             log.error("Exception from Facebook: ", e);
             throw new RuntimeException(e);
+        }
+    }
+
+    private String getCommentLocations(Post post) {
+        return post.getComments().stream()
+                .map(comment -> getUserLocation(comment)).findFirst().orElse("");
+    }
+
+    private String getUserLocation(Comment comment) {
+        try {
+            User user = facebook.getUser(comment.getFrom().getId());
+            return Optional.ofNullable(user.getHometown()).map(idNameEntity -> idNameEntity.getName()).orElse("");
+        } catch (FacebookException f) {
+            return "";
         }
     }
 
