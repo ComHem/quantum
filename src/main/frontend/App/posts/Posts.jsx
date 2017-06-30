@@ -17,7 +17,7 @@ export default class Posts extends PureComponent {
     }
 
     componentDidMount() {
-        this.timer = setInterval(this.displayNewPosts, 3000);
+        this.timer = setInterval(this.displayNewPosts, 6000);
         this.props.fetchFeed();
     }
 
@@ -54,7 +54,7 @@ export default class Posts extends PureComponent {
     }
 
     fetchWhenEmpty(type) {
-        if (this.props[type.type].length <= type.displayCount) {
+        if (this.props[type.type].length < type.displayCount) {
             this.props.fetchFeed()
         }
     }

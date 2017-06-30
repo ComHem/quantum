@@ -24,17 +24,22 @@ public class TwitterService {
         this.twitter = twitter;
     }
 
-    public FeedDto getTweets() throws TwitterException {
-        return FeedMock.getFeedDtoMOCK();
-//        QueryResult result = fetchData();
-//
-//        FeedDto feed = mapToFeed(result);
-//        return feed;
+    public FeedDto getTweets() {
+//        return FeedMock.getFeedDtoMOCK();
+        FeedDto feed = new FeedDto();
+        try {
+            QueryResult result = fetchData();
+            feed = mapToFeed(result);
+
+        } catch (TwitterException e) {
+            Logger.getLogger(TwitterService.class).error("e");
+        }
+        return feed;
     }
 
     private QueryResult fetchData() throws TwitterException {
         Query query = new Query("#comhem OR #comhemab OR @comhemab OR @comhem to:comhemab -filter:retweets").resultType(Query.ResultType.recent);
-        query.count(3);
+        query.count(10);
         return twitter.search(query);
     }
 
@@ -44,10 +49,11 @@ public class TwitterService {
         FeedDto feed = new FeedDto();
         feed.setSingles(
                 postDtos.stream()
-                        .filter(postDto -> postDto.getReplies().isEmpty())
+                        .filter(postDto -> postDto.getReplies() == null || postDto.getReplies().isEmpty())
                         .collect(Collectors.toList()));
         feed.setThreads(
                 postDtos.stream()
+                        .filter(postDto -> postDto.getReplies() != null)
                         .filter(postDto -> !postDto.getReplies().isEmpty())
                         .collect(Collectors.toList()));
         return feed;
@@ -87,7 +93,6 @@ public class TwitterService {
                 PostDto.builder()
                         .author(status.getUser().getName())
                         .message(status.getText())
-                        .replies(getReplies(status))
                         .build()
         ).collect(Collectors.toList());
     }
@@ -97,7 +102,7 @@ public class TwitterService {
 
         try {
             Query query = new Query("to:" + screenName + " since_id:" + tweetID);
-            query.count(2);
+            query.count(1);
             QueryResult results;
 
             do {

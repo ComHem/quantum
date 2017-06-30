@@ -3,6 +3,7 @@ package se.comhem.quantum.feed;
 
 import lombok.*;
 
+import java.util.Collections;
 import java.util.List;
 @Setter
 @Getter
@@ -10,6 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class FeedDto {
-    List<PostDto> threads;
-    List<PostDto> singles;
+    List<PostDto> threads = Collections.emptyList();
+    List<PostDto> singles = Collections.emptyList();
 }
