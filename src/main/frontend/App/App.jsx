@@ -13,9 +13,9 @@ export class App extends Component {
                 <div className="right--feed">
                     <MapBackground />
                 </div>
-                <footer>
-                    <PopularFeed />
-                </footer>
+                {/*<footer>*/}
+                    {/*<PopularFeed />*/}
+                {/*</footer>*/}
             </div>
         );
     }

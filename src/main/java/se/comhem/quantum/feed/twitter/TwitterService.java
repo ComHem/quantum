@@ -6,10 +6,7 @@ import se.comhem.quantum.feed.FeedDto;
 import se.comhem.quantum.feed.PostDto;
 import twitter4j.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
@@ -39,6 +36,7 @@ public class TwitterService {
 
     private QueryResult fetchData() throws TwitterException {
         Query query = new Query("#comhem OR #comhemab OR @comhemab OR @comhem to:comhemab -filter:retweets").resultType(Query.ResultType.recent);
+
         query.count(10);
         return twitter.search(query);
     }
@@ -68,13 +66,20 @@ public class TwitterService {
                         .author(status.getUser().getName())
                         .authorImg(status.getUser().getProfileImageURL())
                         .city(status.getUser().getLocation())
-                        .contentLink("")
+                        .contentLink(getMediaIfExists(status))
                         .location(getGeo(status))
                         .id(status.getId())
                         .plattform("TWITTER")
                         .replies(getReplies(status))
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    private String getMediaIfExists(Status status) {
+        return Arrays.stream(status.getMediaEntities())
+                .map(MediaEntity::getMediaURL)
+                .findFirst()
+                .orElse("");
     }
 
     private List<Double> getGeo(Status status) {

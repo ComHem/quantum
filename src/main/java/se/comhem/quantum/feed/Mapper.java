@@ -19,6 +19,7 @@ public class Mapper {
                 .message(post.getMessage())
                 .authorImg(picUrl)
                 .plattform("facebook")
+                .reactions(post.getReactions().stream().map(reaction -> reaction.getType().toString()).collect(toList()))
                 .contentLink(Optional.ofNullable(post.getAttachments())
                         .map(attachments -> attachments.stream()
                                 .findFirst()

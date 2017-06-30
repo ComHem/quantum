@@ -20,7 +20,8 @@ public class PostDto {
     String authorImg;
     String contentLink;
     List<PostDto> replies;
-    List <Double>location;
+    List<Double> location;
     String city;
+    List<String> reactions;
 
 }
