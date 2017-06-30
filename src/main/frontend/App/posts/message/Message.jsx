@@ -1,18 +1,22 @@
 import React, {PureComponent} from 'react';
-import ThreadReplies from './thread-replies/ThreadReplies'
+import ThreadReplies from './thread-replies/ThreadReplies';
 
-export default class ThreadMessage extends PureComponent {
+export default class Message extends PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.type = this.props.type === "singles" ? "single" : "thread";
+    }
+
     render() {
         return (
-            <div className="message--item message--item__thread">
-                <div className="message--item__single--content">
+            <div className={`message--item message--item__${this.type}`}>
+                <div className={`message--item__single--content`}>
                     <a className="author--icon__pull-left" href="http://twitter.com/ComHemAB">
                         <img className="author-icon" src={this.props.post.authorImg}/>
                     </a>
-                    <a >
-                        <span>{this.props.post.plattform}</span>
-                    </a>
-                    <div className="message--item--body__single">
+                    <div>{this.props.getPlatformIcon(this.props.post.plattform)}</div>
+                    <div className={`message--item--body__single`}>
                         <p>
                             <span className="author-title">{this.props.post.author}</span>
                             <span className="date__pull-right">{this.props.post.date}</span>
@@ -23,16 +27,17 @@ export default class ThreadMessage extends PureComponent {
                             </p>
                         </div>
                     </div>
-                    <a>
-                        <img  src={this.props.post.contentLink}/>
-                    </a>
-
+                    <img src={this.props.post.contentLink}/>
                 </div>
+
+                {this.props.post.replies &&
                   <div className="message-thread__children--container">{this.props.post.replies.map((post, j) => {
-                    return (
-                        <ThreadReplies key={j} post={post}/>
-                    );
-                })}</div>
+                        return (
+                            <ThreadReplies key={j} post={post}/>
+                        );
+                    })}</div>
+                }
+
             </div>
         );
     }

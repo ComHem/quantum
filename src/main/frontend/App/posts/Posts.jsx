@@ -3,8 +3,7 @@ import _ from 'lodash';
 import '../../style/posts.scss';
 import '../../style/animate.scss';
 import Animation from './Animation'
-import SingleMessage from './single-message/SingleMessage'
-import ThreadMessage from './thread-message/ThreadMessage'
+import SingleMessage from './message/Message';
 
 export default class Posts extends PureComponent {
     constructor(props) {
@@ -13,6 +12,8 @@ export default class Posts extends PureComponent {
             {type: "singles", displayCount: 1},
             {type: "threads", displayCount: 1}
         ];
+
+        this.getPlatformIcon = this.getPlatformIcon.bind(this);
     }
 
     componentDidMount() {
@@ -22,6 +23,10 @@ export default class Posts extends PureComponent {
 
     componentWillUnmount() {
         clearInterval(this.timer);
+    }
+
+    getPlatformIcon(platform) {
+        return <i className={`fa fa-${platform.toLowerCase()}`}/>
     }
 
     displayNewPosts = () => {
@@ -41,12 +46,8 @@ export default class Posts extends PureComponent {
             <div className="posts-container">
                 <Animation>
                     {this.props.posts && this.props.posts.map((post, i) => (
-                        this.props.type === 'singles' ? (
-                            <SingleMessage key={Date.now() + i} post={post}/>
-                        ) : (
-                            <ThreadMessage key={Date.now() + i} post={post}/>
-                        )
-                    ))}
+                        <SingleMessage key={Date.now() + i} post={post} type={this.props.type} getPlatformIcon={this.getPlatformIcon}/>)
+                    )}
                 </Animation>
             </div>
         );
