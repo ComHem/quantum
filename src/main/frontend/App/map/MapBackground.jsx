@@ -14,14 +14,14 @@ export class MapBackground extends Component {
         } else if (!_.isEmpty(latest.city)) {
             return this.props.fetchCityLocation(latest.city);
         } else {
-            return [1, 1];
+            return [0, 0];
         }
-    }
+    };
 
     render() {
         const icon = divIcon({
             className: 'map-marker-icon',
-            iconSize: [12, 20]
+            iconSize: [25, 41]
         });
 
 
@@ -36,7 +36,7 @@ export class MapBackground extends Component {
 
                     <TileLayer url='http://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png'/>
 
-                    {this.props.feed.posts.map((latest, j) => {
+                    {this.props.feed.posts && this.props.feed.posts.map((latest, j) => {
                         return (
                             <Marker key={j}
                                     position={this.calculateCordinates(latest)}

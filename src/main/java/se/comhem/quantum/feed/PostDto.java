@@ -1,4 +1,4 @@
-package se.comhem.quantum.feed.twitter;
+package se.comhem.quantum.feed;
 
 import lombok.*;
 
@@ -17,10 +17,11 @@ public class PostDto {
     String message;
     String messageImg;
     String author;
-    String autorImg;
+    String authorImg;
     String contentLink;
     List<PostDto> replies;
-    List <Double>location;
+    List<Double> location;
     String city;
+    List<String> reactions;
 
 }

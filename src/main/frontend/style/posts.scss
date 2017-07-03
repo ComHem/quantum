@@ -1,91 +1,156 @@
 @import "colors";
 
-.message-container {
+@mixin border_on_post_children($color) {
+  color: $color;
+  .message--item__single--content, .message--item__thread--content, .message-thread__children--container {
+    border: 4px solid $color;
+    box-shadow: 5px 5px 2px fade_out($color, 0.6);
+
+    .hashtag {
+      color: $color;
+    }
+  }
+}
+
+.posts-container {
   align-items: center;
   flex-direction: column;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-}
-
-.hashtag {
-  color: $border_color;
-}
-
-.message--item {
-  position: absolute;
-}
-
-.message--item__single--content {
-  padding: 15px;
-  background: $color_white;
-}
-
-.message--item__thread, .message--item__single {
-  max-width: 900px;
-  min-width: 500px;
-  display: flex;
-  flex-direction: column;
-  margin-top: 15px;
-  color: $color_black;
-  text-align: left;
-  font-size: 14px;
-}
-
-.message-thread__children--container {
-  background-color: fade_out(darken($color_white, 20%), 0.5);
-}
-
-.thread-replies {
   padding: 10px;
-  border-bottom: 1px dashed fade_in($comhem_color_4, 0.8);
-  .thread__message {
-    padding: 5px;
+
+  .fa-facebook, .facebook {
+    $fb_color: #3B5998;
+    @include border_on_post_children($fb_color);
+  }
+
+  .fa-twitter, .twitter {
+    $twitter_color: #1DA1F2;
+    @include border_on_post_children($twitter_color);
+  }
+
+  .message--item__single--content, .message--item__thread--content {
+    vertical-align: middle;
+    margin: auto;
+    padding: 15px;
+    background: $color_white;
+    width: 600px;
+  }
+
+  .message--body--text {
+    font-size: 20pt;
+  }
+
+  .message--item__thread, .message--item__single {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 900px;
+    max-height: 90%;
+    min-width: 500px;
+    display: flex;
+    color: $color_black;
+    text-align: left;
+  }
+
+  .message--item__thread {
+    flex-direction: row;
+  }
+
+  .message--item__single {
+    flex-direction: column;
+  }
+
+  .message-thread__children--container {
+    margin-left: 20px;
+    width: 40%;
+    max-height: 90%;
+    background-color: darken($comhem_gray, 5%);
+  }
+
+  .thread-replies {
+    padding: 10px;
+    border-top: 1px solid fade_out($bg_color, 0.5);
+
+    .thread__message {
+      padding: 5px;
+    }
+
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    vertical-align: middle;
+    -ms-interpolation-mode: bicubic;
+  }
+
+  .message--body--text {
+    padding: 15px;
+    font-size: 20px;
+  }
+
+  .author--icon__container {
+    display: block;
+    position: relative;
+    width: 100%;
+
+    .author--icon__pull-left {
+      width: 70px;
+      display: inline-block;
+    }
+
+    .author-icon {
+      display: block;
+      width: 70px;
+      border-radius: 50%;
+      box-shadow: -3px 3px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .message--item--platform-icon {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-size: 15pt;
+    }
+
+    .message--item__description {
+      margin-left: 15px;
+      display: inline-block;
+      position: absolute;
+      top: 0;
+
+      .author-title {
+        display: inline-block;
+      }
+      .date__pull-right {
+        color: #91b594;
+      }
+    }
+  }
+
+  .message--body--wrapper {
+    padding: 0 20px;
+    color: $color_black;
+  }
+
+  /* TODO: FIX OWN CLASS */
+  .thread-replies {
+    margin-left: 5px;
   }
 }
 
-
-.message--body--text {
-  padding: 15px;
-  font-size: 20px;
+.posts-container {
+  position: relative;
+  height: 100%;
+  padding-top: 10px;
 }
 
-.author-icon {
-  display: block;
-  width: 70px;
-  border-radius: 50%;
-}
-
-.author--icon__pull-left {
-  float: left;
-  margin-right: 10px;
-}
-
-.author-title {
-  font-size: large;
-}
-
-.date__pull-right {
-  color: #91b594;
-  margin-left: 10px;
-  float: right;
-}
-
-.message--body--wrapper {
-  margin-left: 80px;
-  color: #666;
-}
-
-.switch {
+.message--item {
+  max-height: 90%;
   position: absolute;
-  top: 30px;
-  left: 30px;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
 }
 
-/* TODO: FIX OWN CLASS */
-.thread-replies {
-  margin-left: 5px;
-}
+

@@ -3,12 +3,10 @@ package se.comhem.quantum.feed.twitter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.comhem.quantum.feed.FeedDto;
+import se.comhem.quantum.feed.PostDto;
 import twitter4j.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
@@ -23,17 +21,22 @@ public class TwitterService {
         this.twitter = twitter;
     }
 
-    public FeedDto getTweets() throws TwitterException {
-        return FeedMock.getFeedDtoMOCK();
-//        QueryResult result = fetchData();
-//
-//        FeedDto feed = mapToFeed(result);
-//        return feed;
+    public FeedDto getTweets() {
+        FeedDto feed = new FeedDto();
+        try {
+            QueryResult result = fetchData();
+            feed = mapToFeed(result);
+
+        } catch (TwitterException exception) {
+            Logger.getLogger(TwitterService.class).warn(exception.getMessage());
+        }
+        return feed;
     }
 
     private QueryResult fetchData() throws TwitterException {
         Query query = new Query("#comhem OR #comhemab OR @comhemab OR @comhem to:comhemab -filter:retweets").resultType(Query.ResultType.recent);
-        query.count(10);
+
+        query.count(100);
         return twitter.search(query);
     }
 
@@ -43,10 +46,11 @@ public class TwitterService {
         FeedDto feed = new FeedDto();
         feed.setSingles(
                 postDtos.stream()
-                        .filter(postDto -> postDto.getReplies().isEmpty())
+                        .filter(postDto -> postDto.getReplies() == null || postDto.getReplies().isEmpty())
                         .collect(Collectors.toList()));
         feed.setThreads(
                 postDtos.stream()
+                        .filter(postDto -> postDto.getReplies() != null)
                         .filter(postDto -> !postDto.getReplies().isEmpty())
                         .collect(Collectors.toList()));
         return feed;
@@ -59,13 +63,22 @@ public class TwitterService {
                 .map(status -> PostDto.builder()
                         .message(status.getText())
                         .author(status.getUser().getName())
+                        .authorImg(status.getUser().getProfileImageURL())
                         .city(status.getUser().getLocation())
+                        .contentLink(getMediaIfExists(status))
                         .location(getGeo(status))
                         .id(status.getId())
                         .plattform("TWITTER")
-                        .replies(getReplies(status))
+//                        .replies(getReplies(status))
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    private String getMediaIfExists(Status status) {
+        return Arrays.stream(status.getMediaEntities())
+                .map(MediaEntity::getMediaURL)
+                .findFirst()
+                .orElse("");
     }
 
     private List<Double> getGeo(Status status) {
@@ -84,7 +97,6 @@ public class TwitterService {
                 PostDto.builder()
                         .author(status.getUser().getName())
                         .message(status.getText())
-                        .replies(getReplies(status))
                         .build()
         ).collect(Collectors.toList());
     }
@@ -94,7 +106,7 @@ public class TwitterService {
 
         try {
             Query query = new Query("to:" + screenName + " since_id:" + tweetID);
-            query.count(5);
+            query.count(1);
             QueryResult results;
 
             do {

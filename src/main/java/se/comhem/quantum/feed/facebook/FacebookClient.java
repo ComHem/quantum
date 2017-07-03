@@ -6,12 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import se.comhem.quantum.feed.FeedDto;
-import se.comhem.quantum.feed.twitter.PostDto;
+import se.comhem.quantum.feed.Mapper;
+import se.comhem.quantum.feed.PostDto;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -34,53 +33,36 @@ public class FacebookClient {
 
     public FeedDto getLatestPosts(int numberOfPosts) {
         List<PostDto> postDtos = fetchPosts(numberOfPosts);
-        return mapToFeed(postDtos);
+        return Mapper.mapToFeed(postDtos);
     }
 
-    private FeedDto mapToFeed(List<PostDto> postDtos) {
-        FeedDto feed = new FeedDto();
-        feed.setSingles(
-                postDtos.stream()
-                        .filter(postDto -> postDto.getReplies().isEmpty())
-                        .collect(Collectors.toList()));
-        feed.setThreads(
-                postDtos.stream()
-                        .filter(postDto -> !postDto.getReplies().isEmpty())
-                        .collect(Collectors.toList()));
-        return feed;
-
-    }
 
     private List<PostDto> fetchPosts(int numberOfPosts) {
         try {
-            return facebook.getPosts(page, new Reading()
+            ResponseList<Post> posts = facebook.getPosts(page, new Reading()
                     .limit(numberOfPosts)
                     .order(Ordering.REVERSE_CHRONOLOGICAL)
-                    .fields(fields))
-                    .stream()
-                    .map(post -> PostDto.builder()
-                            .message(post.getMessage())
-                            .autorImg(getProfilePicPath(post))
-                            .plattform("facebook")
-                            .contentLink(post.getAttachments().get(0).getUrl())
-                            .date(Optional.ofNullable(post.getCreatedTime())
-                                    .map(Date::toString)
-                                    .orElse(""))
-                            .author(post.getFrom().getName())
-                            .replies(post.getComments().stream()
-                                    .map(comment -> PostDto.builder()
-                                            .message(comment.getMessage())
-                                            .author(comment.getFrom().getName())
-                                            .date(Optional.ofNullable(comment.getCreatedTime())
-                                                    .map(Date::toString)
-                                                    .orElse(""))
-                                            .build())
-                                    .collect(toList()))
-                            .build())
+                    .fields(fields));
+            return posts.stream()
+                    .map(post -> Mapper.mapFacebookPostToPostDto(getCommentLocations(post), getProfilePicPath(post), post))
                     .collect(toList());
         } catch (FacebookException e) {
             log.error("Exception from Facebook: ", e);
             throw new RuntimeException(e);
+        }
+    }
+
+    private String getCommentLocations(Post post) {
+        return post.getComments().stream()
+                .map(comment -> getUserLocation(comment)).findFirst().orElse("");
+    }
+
+    private String getUserLocation(Comment comment) {
+        try {
+            User user = facebook.getUser(comment.getFrom().getId());
+            return Optional.ofNullable(user.getHometown()).map(idNameEntity -> idNameEntity.getName()).orElse("");
+        } catch (FacebookException f) {
+            return "";
         }
     }
 

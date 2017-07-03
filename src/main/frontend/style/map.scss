@@ -2,6 +2,7 @@
 @import "colors";
 
 .leaflet-container {
+  z-index: 0;
   top: 0;
   position: absolute;
   display: block;
