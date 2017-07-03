@@ -56,8 +56,7 @@ body {
   top: 0;
   bottom: 0;
   left: 0;
-  right:0;
-  width: 100%;
+  right: 0;
   height: 100%;
   background: rgba(200, 200, 200, 0.25);
   z-index: 1;
@@ -68,4 +67,46 @@ body {
   height: 150px;
   display: block;
   margin: 0 auto;
+}
+
+//ASDASD
+@keyframes progress-animation {
+  0% {
+    width: 100%;
+    background-color: $comhem_color_1;
+  }
+  20% {background-color: $comhem_color_2;}
+  40% {background-color: $comhem_color_3;}
+  60% {background-color: $comhem_color_4;}
+  80% {background-color: $comhem_color_5;}
+  90% {background-color: $comhem_color_6;}
+  100% {
+    background-color: $comhem_color_7;
+    width: 0;
+  }
+}
+
+.quantum-progressbar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+
+  .quantum-progressbar {
+    position: relative;
+    background: $color_white;
+    height: 100%;
+    width: 100%;
+    color: #f3f3f3;
+    transition: width;
+    animation: progress-animation 12s infinite;
+    animation-name: none;
+    transition-timing-function: linear;
+    box-shadow: -2px 2px 10px fade_out($color_black, 0.5);
+
+    &.start, &.start-again {
+      animation-name: progress-animation;
+    }
+  }
 }

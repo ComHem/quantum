@@ -8,11 +8,11 @@ export class MapBackground extends Component {
         // this.props.fetchCityLocation("Stockholm"); //TODO : Location of tweets.
     }
 
-    calculateCordinates = function (latest) {
+    calculateCoordinates = function (latest) {
         if (!_.isEmpty(latest.location)) {
             return [latest.location[0], latest.location[1]];
         } else {
-            return [0, 0];
+            return [-5, -5];
         }
     };
 
@@ -26,17 +26,17 @@ export class MapBackground extends Component {
             const defaultMapPosition = [this.props.defaultMapPosition.lat, this.props.defaultMapPosition.lng];
             return (
                 <Map center={defaultMapPosition}
-                     zoom={4.2}
+                     zoom={4.5}
                      animate={true}
                      zoomControl={false}
                      scrollWheelZoom={false}>
 
                     <TileLayer url='http://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png'/>
 
-                    {this.props.feed.posts && this.props.feed.posts.map((latest, j) => {
+                    {this.props.feed.posts && this.props.feed.posts.map((latest, i) => {
                         return (
-                            <Marker key={j}
-                                    position={this.calculateCordinates(latest)}
+                            <Marker key={i}
+                                    position={this.calculateCoordinates(latest)}
                                     draggable={false}
                                     icon={icon}
                                     ref="marker"/>

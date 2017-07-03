@@ -12,13 +12,15 @@ export const feedReducer = (state = {}, action) => {
             if (action.postsType) {
                 return {
                     ...state,
-                    [action.postType]: action.feed[action.postType]
+                    [action.postType]: action.feed[action.postType],
+                    progress: true
                 };
             } else {
                 return {
                     ...state,
                     threads: action.feed.threads,
-                    singles: action.feed.singles
+                    singles: action.feed.singles,
+                    progress: false
                 };
             }
         case actionTypes.feed.UPDATE_LATEST:
@@ -27,6 +29,7 @@ export const feedReducer = (state = {}, action) => {
                 ...state,
                 type: type,
                 posts: state[type].slice(0, displayCount),
+                progress: !state.progress,
                 [type]: state[type].slice(displayCount)
             };
         default:

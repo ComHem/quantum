@@ -6,6 +6,7 @@ const mapStateToProps = (state, ownProps) => ({
     singles: state.feed.singles,
     threads: state.feed.threads,
     posts: state.feed.posts,
+    progress: state.feed.progress,
     type: state.feed.type
 });
 

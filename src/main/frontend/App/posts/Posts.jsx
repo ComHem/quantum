@@ -2,7 +2,8 @@ import React, {PureComponent} from 'react';
 import _ from 'lodash';
 import '../../style/posts.scss';
 import '../../style/animate.scss';
-import Animation from './Animation'
+import Animation from './Animation';
+import LoadingAnimation from './LoadingAnimation';
 import Message from './message/Message';
 
 export default class Posts extends PureComponent {
@@ -18,9 +19,7 @@ export default class Posts extends PureComponent {
 
     componentDidMount() {
         this.timer = setInterval(this.displayNewPosts, 12000);
-        this.props.fetchFeed().then(() => {
-            this.displayNewPosts();
-        });
+        this.props.fetchFeed();
     }
 
     componentWillUnmount() {
@@ -48,6 +47,7 @@ export default class Posts extends PureComponent {
     render() {
         return (
             <div className="posts-container">
+                {this.props.posts && <LoadingAnimation progress={this.props.progress}/>}
                 <Animation>
                     {this.props.posts && this.props.posts.map((post, i) => (
                             <Message key={Date.now() + i}
