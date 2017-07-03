@@ -9,7 +9,7 @@ export default class Posts extends PureComponent {
     constructor(props) {
         super(props);
         this.types = [
-            {type: "singles", displayCount: 1},
+            {type: "threads", displayCount: 1},
             {type: "threads", displayCount: 1}
         ];
 
@@ -18,7 +18,9 @@ export default class Posts extends PureComponent {
 
     componentDidMount() {
         this.timer = setInterval(this.displayNewPosts, 12000);
-        this.props.fetchFeed();
+        this.props.fetchFeed().then(() => {
+            this.displayNewPosts();
+        });
     }
 
     componentWillUnmount() {
@@ -30,7 +32,9 @@ export default class Posts extends PureComponent {
     }
 
     displayNewPosts = () => {
-        this.types.forEach(type => this.fetchWhenEmpty(type));
+        if (this.types && this.types.length) {
+            this.types.forEach(type => this.fetchWhenEmpty(type));
+        }
 
         const randomTypes = _.shuffle(this.types);
 
@@ -46,10 +50,10 @@ export default class Posts extends PureComponent {
             <div className="posts-container">
                 <Animation>
                     {this.props.posts && this.props.posts.map((post, i) => (
-                        <Message key={Date.now() + i}
-                                       post={post}
-                                       type={this.props.type}
-                                       getPlatformIcon={this.getPlatformIcon}/>
+                            <Message key={Date.now() + i}
+                                     post={post}
+                                     type={this.props.type}
+                                     getPlatformIcon={this.getPlatformIcon}/>
                         )
                     )}
                 </Animation>

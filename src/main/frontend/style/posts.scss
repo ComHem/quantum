@@ -4,9 +4,9 @@
   color: $color;
   .message--item__single--content, .message--item__thread--content, .message-thread__children--container {
     border: 4px solid $color;
-    box-shadow: 5px 5px 2px fade_out($color, 0.6);
+    box-shadow: 5px 5px 3px fade_out($color, 0.6);
 
-    .hashtag {
+    .hashtag, .fa {
       color: $color;
     }
   }
@@ -19,10 +19,22 @@
   flex-wrap: wrap;
   justify-content: space-around;
   padding: 10px;
+  user-select: none;
+  -moz-user-select: none;
 
   .fa-facebook, .facebook {
     $fb_color: #3B5998;
     @include border_on_post_children($fb_color);
+  }
+
+  .message--item--comment-icon {
+    position: relative;
+    margin-top: 10px;
+    margin-right: 15px;
+    .fa-commenting {
+      position: absolute;
+      right: 0;
+    }
   }
 
   .fa-twitter, .twitter {
@@ -65,14 +77,23 @@
 
   .message-thread__children--container {
     margin-left: 20px;
+    padding: 4px 8px;
     width: 40%;
     max-height: 90%;
     background-color: darken($comhem_gray, 5%);
   }
 
+  &:nth-child(1 .thread-replies) {
+    border-top: none;
+  }
+
   .thread-replies {
     padding: 10px;
-    border-top: 1px solid fade_out($bg_color, 0.5);
+    border-bottom: 1px solid fade_out($bg_color, 0.5);
+
+    &:last-of-type {
+      border-bottom: none;
+    }
 
     .thread__message {
       padding: 5px;
@@ -106,7 +127,7 @@
       display: block;
       width: 70px;
       border-radius: 50%;
-      box-shadow: -3px 3px 10px rgba(0, 0, 0, 0.2);
+      box-shadow: -3px 3px 10px rgba(0, 0, 0, 0.3);
     }
 
     .message--item--platform-icon {
@@ -117,14 +138,16 @@
     }
 
     .message--item__description {
-      margin-left: 15px;
+      margin-left: 12px;
       display: inline-block;
       position: absolute;
       top: 0;
 
-      .author-title {
-        display: inline-block;
+      .author-name {
+        color: $comhem_color_5;
+        font-style: normal;
       }
+
       .date__pull-right {
         color: #91b594;
       }
@@ -134,11 +157,6 @@
   .message--body--wrapper {
     padding: 0 20px;
     color: $color_black;
-  }
-
-  /* TODO: FIX OWN CLASS */
-  .thread-replies {
-    margin-left: 5px;
   }
 }
 
@@ -153,4 +171,8 @@
   position: absolute;
 }
 
-
+.author-name, .thread-author {
+  font-weight: 900;
+  font-style: italic;
+  display: inline-block;
+}

@@ -1,6 +1,10 @@
 package se.comhem.quantum.feed;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -10,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class PostDto {
+    public static final Long serialVersionUID = 1L;
 
     String id;
     String date;
@@ -23,5 +28,4 @@ public class PostDto {
     List<Double> location;
     String city;
     List<String> reactions;
-
 }

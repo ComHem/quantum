@@ -56,3 +56,13 @@ spec:
             secretKeyRef:
               name: quantum-secrets
               key: QUANTUM_TWITTER_ACCESS_TOKEN_SECRET
+        - name: QUANTUM_EVENTHUB_WRITE_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: quantum-secrets
+              key: QUANTUM_EVENTHUB_WRITE_CONNECTION_STRING
+        - name: QUANTUM_EVENTHUB_READ_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: quantum-secrets
+              key: QUANTUM_EVENTHUB_READ_CONNECTION_STRING

@@ -66,7 +66,7 @@ public class TwitterService {
                 .map(status -> PostDto.builder()
                         .message(status.getText())
                         .author(status.getUser().getName())
-                        .authorImg(status.getUser().getProfileImageURL())
+                        .authorImg(status.getUser().getBiggerProfileImageURL())
                         .city(status.getUser().getLocation())
                         .contentLink(getMediaIfExists(status))
                         .location(getGeo(status))

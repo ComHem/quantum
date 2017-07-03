@@ -11,6 +11,9 @@ security:
     enabled: false
 
 quantum:
+  eventhub:
+    writeConnectionString: ${QUANTUM_EVENTHUB_WRITE_CONNECTION_STRING}
+    readConnectionString: ${QUANTUM_EVENTHUB_READ_CONNECTION_STRING}
   facebook:
     appId: ${QUANTUM_FB_APP_ID}
     appSecret: ${QUANTUM_FB_APP_SECRET}

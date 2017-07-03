@@ -3,6 +3,8 @@ package se.comhem.quantum.feed;
 import facebook4j.Post;
 import twitter4j.Status;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +29,7 @@ public class Mapper {
                                 .map(Post.Attachment::getUrl).orElse(""))
                         .orElse(""))
                 .date(Optional.ofNullable(post.getUpdatedTime())
+
                         .map(Date::toString)
                         .orElse(""))
                 .author(post.getFrom().getName())
@@ -36,11 +39,16 @@ public class Mapper {
                                 .author(comment.getFrom().getName())
                                 .id(comment.getFrom().getId())
                                 .date(Optional.ofNullable(comment.getCreatedTime())
-                                        .map(Date::toString)
+                                        .map(Mapper::formatDate)
                                         .orElse(""))
                                 .build())
                         .collect(toList()))
                 .build();
+    }
+
+    private static String formatDate(Date date) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return df.format(date);
     }
 
     public static FeedDto mapToFeed(List<PostDto> postDtos) {
