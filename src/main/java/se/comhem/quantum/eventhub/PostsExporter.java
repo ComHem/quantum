@@ -28,7 +28,7 @@ public class PostsExporter {
         this.postsCache = postsCache;
     }
 
-    @Scheduled(initialDelay = 1000, fixedDelay = 1000 * 60 * 15)
+    @Scheduled(initialDelay = 1000 * 60 * 15, fixedDelay = 1000 * 60 * 15)
     public void exportLatestPosts() {
         Stopwatch stopWatch = Stopwatch.createStarted();
         FeedDto feed = facebookClient.getLatestPosts(100);
