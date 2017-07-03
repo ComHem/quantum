@@ -26,8 +26,8 @@ export default class Message extends PureComponent {
     }
 
     getFormattedDate() {
-        console.info(this.props.post.date);
-        return moment(new Date(this.props.post.date)).toISOString();
+        //return moment(new Date(this.props.post.date)); //TODO JavaFix. Fix in Mapper, need more fix.
+        return "DATE";
     }
 
     render() {
@@ -37,8 +37,9 @@ export default class Message extends PureComponent {
                     <div className="author--icon__container">
                         <div className="author--icon__pull-left">
                             <img className="author-icon" src={this.props.post.authorImg}/>
-                            <div
-                                className="message--item--platform-icon">{this.props.getPlatformIcon(this.props.post.plattform)}</div>
+                            <div className="message--item--platform-icon">
+                                {this.props.getPlatformIcon(this.props.post.plattform)}
+                            </div>
                         </div>
                         <div className="message--item__description">
                             <p className="author-name">{this.props.post.author}</p>
