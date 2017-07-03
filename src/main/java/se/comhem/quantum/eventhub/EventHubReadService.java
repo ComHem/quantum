@@ -27,6 +27,9 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class EventHubReadService {
 
+    private static long ESTIMATE_MESSAGE_SIZE = 2000L;
+    private static int NUMBER_OF_MESSAGES_TO_READ = 100;
+
     private final EventHubClient eventHubReadClient;
     private final ObjectMapper objectMapper;
 
@@ -57,7 +60,8 @@ public class EventHubReadService {
     }
 
     private String calculateStartingOffset(EventHubPartitionRuntimeInformation partitionInfo) {
-        return String.valueOf(Long.valueOf(partitionInfo.getLastEnqueuedOffset())-50000L);
+        long offset = Long.valueOf(partitionInfo.getLastEnqueuedOffset()) - NUMBER_OF_MESSAGES_TO_READ * ESTIMATE_MESSAGE_SIZE;
+        return String.valueOf(offset);
     }
 
     private CompletionStage<PartitionReceiver> createReceiverForOffset(String offset) {
