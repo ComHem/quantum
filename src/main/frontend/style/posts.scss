@@ -19,6 +19,7 @@
   flex-wrap: wrap;
   justify-content: space-around;
   padding: 10px;
+  user-select: none;
 
   .fa-facebook, .facebook {
     $fb_color: #3B5998;
