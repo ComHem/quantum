@@ -1,4 +1,4 @@
-package se.comhem.quantum.eventhub;
+package se.comhem.quantum.integration.eventhub;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import se.comhem.quantum.feed.PostDto;
+import se.comhem.quantum.model.Post;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class EventHubReadService {
         this.objectMapper = objectMapper;
     }
 
-    public List<PostDto> read() {
+    public List<Post> read() {
         PartitionReceiver receiver = null;
         try {
             receiver = eventHubReadClient.getPartitionRuntimeInformation("1")
@@ -73,7 +73,7 @@ public class EventHubReadService {
         }
     }
 
-    private List<PostDto> receive(PartitionReceiver receiver) throws ServiceBusException {
+    private List<Post> receive(PartitionReceiver receiver) throws ServiceBusException {
         try {
             List<EventData> allEvents = getLatestEvents(receiver);
             return allEvents.stream()
@@ -104,12 +104,12 @@ public class EventHubReadService {
     }
 
     private boolean compatibleSerializedVersion(EventData eventData) {
-        return PostDto.serialVersionUID.equals(eventData.getProperties().get("serialVersionUID"));
+        return Post.serialVersionUID.equals(eventData.getProperties().get("serialVersionUID"));
     }
 
-    private Stream<PostDto> deserialize(EventData event) {
+    private Stream<Post> deserialize(EventData event) {
         try {
-            return Stream.of(objectMapper.readValue(event.getBytes(), PostDto.class));
+            return Stream.of(objectMapper.readValue(event.getBytes(), Post.class));
         } catch (java.io.IOException e) {
             log.error("Failed to deserialize post: " + event, e);
             return Stream.empty();

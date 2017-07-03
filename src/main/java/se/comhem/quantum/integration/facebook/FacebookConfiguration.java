@@ -1,4 +1,4 @@
-package se.comhem.quantum.feed.facebook;
+package se.comhem.quantum.integration.facebook;
 
 import facebook4j.Facebook;
 import facebook4j.FacebookFactory;

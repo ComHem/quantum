@@ -1,11 +1,12 @@
-package se.comhem.quantum.eventhub;
+package se.comhem.quantum.posts;
 
-import com.google.common.base.Stopwatch;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import se.comhem.quantum.feed.PostDto;
+import se.comhem.quantum.integration.eventhub.EventHubReadService;
+import se.comhem.quantum.model.Post;
 
 import java.util.List;
 
@@ -15,18 +16,16 @@ public class PostsCache {
 
     private final EventHubReadService eventHubReadService;
 
+    @Autowired
     public PostsCache(EventHubReadService eventHubReadService) {
         this.eventHubReadService = eventHubReadService;
     }
 
     @CacheEvict(value = "posts", allEntries = true)
-    public void reloadCache() { }
+    public void evictCache() { }
 
     @Cacheable("posts")
-    public List<PostDto> getPosts() {
-        Stopwatch stopWatch = Stopwatch.createStarted();
-        List<PostDto> posts = eventHubReadService.read();
-        log.info("Took {} ms to fetch {} posts", stopWatch.stop().elapsed().toMillis(), posts.size());
-        return posts;
+    public List<Post> getPosts() {
+        return eventHubReadService.read();
     }
 }

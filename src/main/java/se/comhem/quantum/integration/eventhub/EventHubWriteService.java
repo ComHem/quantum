@@ -1,4 +1,4 @@
-package se.comhem.quantum.eventhub;
+package se.comhem.quantum.integration.eventhub;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import se.comhem.quantum.feed.PostDto;
+import se.comhem.quantum.model.Post;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -28,7 +28,7 @@ public class EventHubWriteService {
         this.objectMapper = objectMapper;
     }
 
-    public void send(List<PostDto> posts) {
+    public void send(List<Post> posts) {
         List<EventData> events = posts.stream()
             .flatMap(this::serialize)
             .map(this::createEvent)
@@ -49,11 +49,11 @@ public class EventHubWriteService {
 
     private EventData createEvent(byte[] data) {
         EventData eventData = new EventData(data);
-        eventData.getProperties().put("serialVersionUID", PostDto.serialVersionUID);
+        eventData.getProperties().put("serialVersionUID", Post.serialVersionUID);
         return eventData;
     }
 
-    private Stream<byte[]> serialize(PostDto post) {
+    private Stream<byte[]> serialize(Post post) {
         try {
             return Stream.of(objectMapper.writeValueAsBytes(post));
         } catch (JsonProcessingException e) {

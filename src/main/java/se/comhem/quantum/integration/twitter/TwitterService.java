@@ -1,69 +1,60 @@
-package se.comhem.quantum.feed.twitter;
+package se.comhem.quantum.integration.twitter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import se.comhem.quantum.feed.FeedDto;
-import se.comhem.quantum.feed.PostDto;
-import twitter4j.*;
+import se.comhem.quantum.integration.geocode.GeoCodeService;
+import se.comhem.quantum.model.Platform;
+import se.comhem.quantum.model.Post;
+import twitter4j.MediaEntity;
+import twitter4j.Query;
+import twitter4j.QueryResult;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 
 @Service
+@Slf4j
 public class TwitterService {
 
     private final Twitter twitter;
-    private final RestTemplate restTemplate;
+    private final GeoCodeService geoCodeService;
 
     @Autowired
-    public TwitterService(Twitter twitter, RestTemplate restTemplate) {
+    public TwitterService(Twitter twitter, GeoCodeService geoCodeService) {
         this.twitter = twitter;
-        this.restTemplate = restTemplate;
+        this.geoCodeService = geoCodeService;
     }
 
-    public FeedDto getTweets() {
-        FeedDto feed = new FeedDto();
+    public List<Post> getTweets(int numberOfTweets) {
         try {
-            QueryResult result = fetchData();
-            feed = mapToFeed(result);
-
-        } catch (TwitterException exception) {
-            Logger.getLogger(TwitterService.class).warn(exception.getMessage());
+            QueryResult result = fetchData(numberOfTweets);
+            return mapTwitterStatuses(result);
+        } catch (TwitterException e) {
+            log.error("Exception from Facebook: ", e);
+            throw new RuntimeException(e);
         }
-        return feed;
     }
 
-    private QueryResult fetchData() throws TwitterException {
+    private QueryResult fetchData(int numberOfTweets) throws TwitterException {
         Query query = new Query("#comhem OR #comhemab OR @comhemab OR @comhem to:comhemab -filter:retweets").resultType(Query.ResultType.recent);
-
-        query.count(100);
+        query.count(numberOfTweets);
         return twitter.search(query);
     }
 
 
-    private FeedDto mapToFeed(QueryResult result) {
-        List<PostDto> postDtos = mapTwitterStatuses(result);
-        FeedDto feed = new FeedDto();
-        feed.setSingles(
-                postDtos.stream()
-                        .filter(postDto -> postDto.getReplies() == null || postDto.getReplies().isEmpty())
-                        .collect(Collectors.toList()));
-        feed.setThreads(
-                postDtos.stream()
-                        .filter(postDto -> postDto.getReplies() != null)
-                        .filter(postDto -> !postDto.getReplies().isEmpty())
-                        .collect(Collectors.toList()));
-        return feed;
-
-    }
-
-    private List<PostDto> mapTwitterStatuses(QueryResult result) {
+    private List<Post> mapTwitterStatuses(QueryResult result) {
         return result.getTweets().stream()
                 .filter(status -> status.getInReplyToStatusId() == -1)
-                .map(status -> PostDto.builder()
+                .map(status -> Post.builder()
                         .message(status.getText())
                         .author(status.getUser().getName())
                         .authorImg(status.getUser().getBiggerProfileImageURL())
@@ -71,8 +62,8 @@ public class TwitterService {
                         .contentLink(getMediaIfExists(status))
                         .location(getGeo(status))
                         .id(String.valueOf(status.getId()))
-                        .plattform("TWITTER")
-//                        .replies(getReplies(status))
+                        .platform(Platform.TWITTER)
+                        .replies(getReplies(status))
                         .build())
                 .collect(Collectors.toList());
     }
@@ -91,24 +82,17 @@ public class TwitterService {
     }
 
     private List<Double> getGeoFromCity(String cityName) {
-        if (!cityName.isEmpty()) {
-            PlaceLocation forObject = restTemplate.getForObject("http://maps.googleapis.com/maps/api/geocode/json?address=" + cityName + "&sensor=false", PlaceLocation.class);
-            return forObject.getLocation()
-                    .map(location -> asList(location.getLat(), location.getLng()))
-                    .orElseGet(Collections::emptyList);
-        } else {
-            return Collections.emptyList();
-        }
+        return geoCodeService.getGeoLocation(cityName);
     }
 
-    private List<PostDto> getReplies(Status status) {
+    private List<Post> getReplies(Status status) {
         ArrayList<Status> replies = fetchReplies(status.getUser().getScreenName(), status.getId());
-        return mapToPostDtos(replies);
+        return mapToPosts(replies);
     }
 
-    private List<PostDto> mapToPostDtos(ArrayList<Status> replies2) {
+    private List<Post> mapToPosts(ArrayList<Status> replies2) {
         return replies2.stream().map(status ->
-                PostDto.builder()
+                Post.builder()
                         .author(status.getUser().getName())
                         .message(status.getText())
                         .build()
@@ -125,9 +109,7 @@ public class TwitterService {
 
             do {
                 results = twitter.search(query);
-                System.out.println("Results: " + results.getTweets().size());
                 List<Status> tweets = results.getTweets();
-
                 for (Status tweet : tweets)
                     if (tweet.getInReplyToStatusId() == tweetID)
                         replies.add(tweet);

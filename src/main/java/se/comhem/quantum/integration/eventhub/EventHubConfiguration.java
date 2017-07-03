@@ -1,4 +1,4 @@
-package se.comhem.quantum.eventhub;
+package se.comhem.quantum.integration.eventhub;
 
 import com.microsoft.azure.eventhubs.EventHubClient;
 import com.microsoft.azure.servicebus.ServiceBusException;
