@@ -15,8 +15,13 @@ export default class Message extends PureComponent {
 
     getStyledMessage() {
         const hashTags = /#([\w]+)/gi;
-        return reactStringReplace(this.props.post.message, hashTags, (match) => (
+        const atTags = /@([\w]+)/gi;
+        let hashReplace = reactStringReplace(this.props.post.message, hashTags, (match) => (
             <span className="hashtag">#{match}</span>
+        ));
+
+        return reactStringReplace(hashReplace, atTags, (match) => (
+            <span className="hashtag">@{match}</span>
         ));
     }
 
@@ -36,7 +41,7 @@ export default class Message extends PureComponent {
                                 className="message--item--platform-icon">{this.props.getPlatformIcon(this.props.post.plattform)}</div>
                         </div>
                         <div className="message--item__description">
-                            <p className="author-title">{this.props.post.author}</p>
+                            <p className="author-name">{this.props.post.author}</p>
                             <p className="date__pull-right">{this.getFormattedDate()}</p>
                         </div>
                     </div>
@@ -52,6 +57,9 @@ export default class Message extends PureComponent {
 
                 {this.props.post.replies && this.props.post.replies.length ?
                     <div className="message-thread__children--container">
+                        <div className="message--item--comment-icon">
+                            <i className="fa fa-commenting"/>
+                        </div>
                         {this.props.post.replies.map((post, j) => <ThreadReplies key={j} post={post}/>)}
                     </div> : null
                 }
