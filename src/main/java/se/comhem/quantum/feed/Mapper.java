@@ -14,12 +14,12 @@ import static java.util.stream.Collectors.toList;
 
 public class Mapper {
 
-    public static PostDto mapFacebookPostToPostDto(String commentLocation, String picUrl, Post post) {
+    public static PostDto mapFacebookPostToPostDto(String userLocation, String picUrl, Post post) {
         return PostDto.builder()
                 .message(post.getMessage())
                 .authorImg(picUrl)
                 .plattform("facebook")
-                .city(commentLocation)
+                .city(userLocation)
                 .reactions(post.getReactions().stream().map(reaction -> reaction.getType().toString()).collect(toList()))
                 .contentLink(Optional.ofNullable(post.getAttachments())
                         .map(attachments -> attachments.stream()
@@ -34,6 +34,7 @@ public class Mapper {
                         .map(comment -> PostDto.builder()
                                 .message(comment.getMessage())
                                 .author(comment.getFrom().getName())
+                                .id(comment.getFrom().getId())
                                 .date(Optional.ofNullable(comment.getCreatedTime())
                                         .map(Date::toString)
                                         .orElse(""))

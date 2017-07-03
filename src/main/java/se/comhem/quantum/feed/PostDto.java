@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 public class PostDto {
 
-    Long id;
+    String id;
     String date;
     String plattform;
     String message;

@@ -44,7 +44,7 @@ public class FacebookClient {
                     .order(Ordering.REVERSE_CHRONOLOGICAL)
                     .fields(fields));
             return posts.stream()
-                    .map(post -> Mapper.mapFacebookPostToPostDto(getCommentLocations(post), getProfilePicPath(post), post))
+                    .map(post -> Mapper.mapFacebookPostToPostDto(getUserLocation(post), getProfilePicPath(post), post))
                     .collect(toList());
         } catch (FacebookException e) {
             log.error("Exception from Facebook: ", e);
@@ -52,12 +52,7 @@ public class FacebookClient {
         }
     }
 
-    private String getCommentLocations(Post post) {
-        return post.getComments().stream()
-                .map(comment -> getUserLocation(comment)).findFirst().orElse("");
-    }
-
-    private String getUserLocation(Comment comment) {
+    private String getUserLocation(Post comment) {
         try {
             User user = facebook.getUser(comment.getFrom().getId());
             return Optional.ofNullable(user.getHometown()).map(idNameEntity -> idNameEntity.getName()).orElse("");

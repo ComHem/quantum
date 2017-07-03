@@ -5,14 +5,12 @@ import {divIcon} from 'leaflet';
 
 export class MapBackground extends Component {
     componentDidMount() {
-        this.props.fetchCityLocation("Stockholm"); //TODO : Location of tweets.
+        // this.props.fetchCityLocation("Stockholm"); //TODO : Location of tweets.
     }
 
     calculateCordinates = function (latest) {
         if (!_.isEmpty(latest.location)) {
             return [latest.location[0], latest.location[1]];
-        } else if (!_.isEmpty(latest.city)) {
-            return this.props.fetchCityLocation(latest.city);
         } else {
             return [0, 0];
         }
@@ -25,11 +23,10 @@ export class MapBackground extends Component {
         });
 
 
-        if (this.props.map.location) {
             const defaultMapPosition = [this.props.defaultMapPosition.lat, this.props.defaultMapPosition.lng];
             return (
                 <Map center={defaultMapPosition}
-                     zoom={4.5}
+                     zoom={4.2}
                      animate={true}
                      zoomControl={false}
                      scrollWheelZoom={false}>
@@ -47,8 +44,6 @@ export class MapBackground extends Component {
                     })}
                 </Map>
             );
-        }
-        return null;
     }
 }
 

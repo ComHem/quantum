@@ -16,7 +16,7 @@ quantum:
     appSecret: ${QUANTUM_FB_APP_SECRET}
     accessToken: ${QUANTUM_FB_ACCESS_TOKEN}
     page: ${QUANTUM_FB_PAGE:comhem}
-    fields: updated_time, message,comments,properties,reactions,tags,picture,fullPicture,story,storyTags,whiteTags,place,link,name,to,from,icon,actions,sharesCount,statusType,attachments,parentId
+    fields: hometown,location,updated_time,message,comments,properties,reactions,tags,picture,fullPicture,story,storyTags,whiteTags,place,link,name,to,from,icon,actions,sharesCount,statusType,attachments,parentId,user_location,user_hometown
   twitter:
     consumerKey: ${QUANTUM_TWITTER_CONSUMER_KEY}
     consumerSecret: ${QUANTUM_TWITTER_CONSUMER_SECRET}

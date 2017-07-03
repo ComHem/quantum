@@ -2,6 +2,7 @@ package se.comhem.quantum.feed.twitter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import se.comhem.quantum.feed.FeedDto;
 import se.comhem.quantum.feed.PostDto;
 import twitter4j.*;
@@ -15,10 +16,12 @@ import static java.util.Arrays.asList;
 public class TwitterService {
 
     private final Twitter twitter;
+    private final RestTemplate restTemplate;
 
     @Autowired
-    public TwitterService(Twitter twitter) {
+    public TwitterService(Twitter twitter, RestTemplate restTemplate) {
         this.twitter = twitter;
+        this.restTemplate = restTemplate;
     }
 
     public FeedDto getTweets() {
@@ -67,7 +70,7 @@ public class TwitterService {
                         .city(status.getUser().getLocation())
                         .contentLink(getMediaIfExists(status))
                         .location(getGeo(status))
-                        .id(status.getId())
+                        .id(String.valueOf(status.getId()))
                         .plattform("TWITTER")
 //                        .replies(getReplies(status))
                         .build())
@@ -84,7 +87,18 @@ public class TwitterService {
     private List<Double> getGeo(Status status) {
         return Optional.ofNullable(status.getGeoLocation())
                 .map(geoLocation -> asList(geoLocation.getLatitude(), geoLocation.getLongitude()))
-                .orElseGet(Collections::emptyList);
+                .orElseGet(() -> getGeoFromCity(status.getUser().getLocation()));
+    }
+
+    private List<Double> getGeoFromCity(String cityName) {
+        if (!cityName.isEmpty()) {
+            PlaceLocation forObject = restTemplate.getForObject("http://maps.googleapis.com/maps/api/geocode/json?address=" + cityName + "&sensor=false", PlaceLocation.class);
+            return forObject.getLocation()
+                    .map(location -> asList(location.getLat(), location.getLng()))
+                    .orElseGet(Collections::emptyList);
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     private List<PostDto> getReplies(Status status) {

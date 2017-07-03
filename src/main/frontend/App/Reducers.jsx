@@ -6,21 +6,6 @@ import {
 
 import {actionTypes} from './actionTypes';
 
-export const mapReducer = (state = {}, action) => {
-    switch (action.type) {
-        case actionTypes.maps.GET_GEOLOCATION:
-            return {
-                ...state,
-                location: {
-                    lat: action.location.geometry.location.lat,
-                    lng: action.location.geometry.location.lng
-                }
-            };
-        default:
-            return state;
-    }
-};
-
 export const feedReducer = (state = {}, action) => {
     switch (action.type) {
         case actionTypes.feed.UPDATE_FEED:
@@ -50,7 +35,6 @@ export const feedReducer = (state = {}, action) => {
 };
 
 export const reducers = combineReducers({
-    map: mapReducer,
     feed: feedReducer
 });
 
