@@ -31,4 +31,5 @@ docker build -t ${image} . && \
 docker tag ${image} ${repo}:${tag} && \
 docker push ${image} && \
 kubectl set image deployment/quantum-deployment quantum=${image} --record && \
+kubectl rollout status deployment/quantum-deployment && \
 echo Deployed ${image} to kubernetes cluster
