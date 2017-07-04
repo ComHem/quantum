@@ -42,7 +42,10 @@ public class PostsExporter {
     @PostConstruct
     private void postConstruct() {
         log.info("Loading initial posts...");
-        postsCache.getPosts();
+        List<Post> posts = postsCache.getPosts();
+        if (posts.isEmpty()) {
+            exportLatestPosts();
+        }
     }
 
     @Scheduled(initialDelay = FIFTEEN_MINUTES, fixedDelay = FIFTEEN_MINUTES)
