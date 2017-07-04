@@ -13,10 +13,10 @@ export default class Message extends PureComponent {
         this.type = this.props.type === "singles" ? "single" : "thread";
     }
 
-    getStyledMessage() {
+    getStyledMessage(message = this.props.post.message) {
         const hashTags = /#([\w]+)/gi;
         const atTags = /@([\w]+)/gi;
-        let hashReplace = reactStringReplace(this.props.post.message, hashTags, (match) => (
+        let hashReplace = reactStringReplace(message, hashTags, (match) => (
             <span className="hashtag">#{match}</span>
         ));
 
@@ -43,7 +43,7 @@ export default class Message extends PureComponent {
                         </div>
                         <div className="message--item__description">
                             <p className="author-name">{this.props.post.author}</p>
-                            <p className="date__pull-right">{this.getFormattedDate()}</p>
+                            <p className="date">{this.getFormattedDate()}</p>
                         </div>
                     </div>
                     <div className={`message--item--body__single`}>
@@ -61,7 +61,7 @@ export default class Message extends PureComponent {
                         <div className="message--item--comment-icon">
                             <i className="fa fa-commenting"/>
                         </div>
-                        {this.props.post.replies.map((post, j) => <ThreadReplies key={j} post={post}/>)}
+                        {this.props.post.replies.map((post, j) => <ThreadReplies key={j} getStyledMessage={this.getStyledMessage.bind(this)} post={post}/>)}
                     </div> : null
                 }
             </div>

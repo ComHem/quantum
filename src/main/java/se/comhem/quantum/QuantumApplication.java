@@ -1,5 +1,9 @@
 package se.comhem.quantum;
 
+import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,5 +24,21 @@ public class QuantumApplication {
 	@Bean
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
+	}
+
+
+	@Bean
+	public Module jdk8Module() {
+		return new Jdk8Module();
+	}
+
+	@Bean
+	public Module parameterNamesModule() {
+		return new ParameterNamesModule();
+	}
+
+	@Bean
+	public Module javaTimeModule() {
+		return new JavaTimeModule();
 	}
 }

@@ -75,12 +75,15 @@ public class EventHubReadService {
 
     private List<Post> receive(PartitionReceiver receiver) throws ServiceBusException {
         try {
-            List<EventData> allEvents = getLatestEvents(receiver);
-            return allEvents.stream()
-                .skip(Math.max(0, allEvents.size() - 100))
+            Long start = System.currentTimeMillis();
+            List<EventData> events = getLatestEvents(receiver);
+            List<Post> posts = events.stream()
+                .skip(Math.max(0, events.size() - 100))
                 .filter(this::compatibleSerializedVersion)
                 .flatMap(this::deserialize)
                 .collect(collectingAndThen(toList(), Lists::reverse));
+            log.info("Took {} ms to fetch {} events (after filtering {} posts)", System.currentTimeMillis() - start, events.size(), posts.size());
+            return posts;
         } catch (ServiceBusException e) {
             log.error("Failed to receive events", e);
             throw new RuntimeException(e);
@@ -88,7 +91,6 @@ public class EventHubReadService {
     }
 
     private List<EventData> getLatestEvents(PartitionReceiver receiver) throws ServiceBusException {
-        Long start = System.currentTimeMillis();
         List<EventData> allEvents = new ArrayList<>(100);
         while (true) {
             Iterable<EventData> events = receiver.receiveSync(100);
@@ -99,7 +101,6 @@ public class EventHubReadService {
             log.error("Failed get any events");
             throw new RuntimeException("Failed get any events");
         }
-        log.info("Took {} ms to fetch {} events", System.currentTimeMillis() - start, allEvents.size());
         return allEvents;
     }
 

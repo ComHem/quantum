@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import se.comhem.quantum.integration.geocode.GeoCodeService;
 import se.comhem.quantum.model.Platform;
 import se.comhem.quantum.model.Post;
+import se.comhem.quantum.util.DateUtils;
 import twitter4j.MediaEntity;
 import twitter4j.Query;
 import twitter4j.QueryResult;
@@ -17,9 +18,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 
 @Service
 @Slf4j
@@ -36,8 +37,12 @@ public class TwitterService {
 
     public List<Post> getTweets(int numberOfTweets) {
         try {
+            long start = System.currentTimeMillis();
             QueryResult result = fetchData(numberOfTweets);
-            return mapTwitterStatuses(result);
+            log.info("{}", result.getRateLimitStatus().toString());
+            List<Post> posts = mapTwitterStatuses(result);
+            log.info("Took {} ms to fetch {} tweets", System.currentTimeMillis() - start, posts.size());
+            return posts;
         } catch (TwitterException e) {
             log.error("Exception from Facebook: ", e);
             throw new RuntimeException(e);
@@ -55,18 +60,19 @@ public class TwitterService {
         return result.getTweets().stream()
                 .filter(status -> status.getInReplyToStatusId() == -1)
                 .map(status -> Post.builder()
+                        .id(String.valueOf(status.getId()))
                         .message(status.getText())
                         .author(status.getUser().getName())
                         .authorImg(status.getUser().getBiggerProfileImageURL())
                         .city(status.getUser().getLocation())
                         .location(getGeo(status))
                         .contentLink(getMediaIfExists(status))
-                        .id(String.valueOf(status.getId()))
                         .platform(Platform.TWITTER)
-                        .date(status.getCreatedAt().toString())
+                        .date(DateUtils.fromDate(status.getCreatedAt()))
+                        .updateDate(DateUtils.fromDate(status.getCreatedAt()))
                         .replies(getReplies(status))
                         .build())
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     private String getMediaIfExists(Status status) {
@@ -93,14 +99,18 @@ public class TwitterService {
 
     private List<Post> mapTwitterRepliesToPosts(ArrayList<Status> resplies) {
         return resplies.stream().map(status ->
-                Post.builder()
-                        .author(status.getUser().getName())
-                        .message(status.getText())
-                        .date(status.getCreatedAt().toString())
-                        .city(status.getUser().getLocation())
-                        .location(getGeo(status))
-                        .build()
-        ).collect(Collectors.toList());
+            Post.builder()
+                .id(String.valueOf(status.getId()))
+                .platform(Platform.TWITTER)
+                .author(status.getUser().getName())
+                .authorImg(status.getUser().getBiggerProfileImageURL())
+                .message(status.getText())
+                .date(DateUtils.fromDate(status.getCreatedAt()))
+                .updateDate(DateUtils.fromDate(status.getCreatedAt()))
+                .city(status.getUser().getLocation())
+                .location(getGeo(status))
+                .build()
+        ).collect(toList());
     }
 
     private ArrayList<Status> fetchReplies(String screenName, long tweetID) {
@@ -113,6 +123,7 @@ public class TwitterService {
 
             do {
                 results = twitter.search(query);
+                log.info("{}", results.getRateLimitStatus().toString());
                 List<Status> tweets = results.getTweets();
                 for (Status tweet : tweets)
                     if (tweet.getInReplyToStatusId() == tweetID)

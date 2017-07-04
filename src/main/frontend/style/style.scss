@@ -2,6 +2,7 @@
 @import "colors";
 @import "~font-awesome/css/font-awesome.css";
 
+$animation_time_page_reel: 12s;
 $bigger_layout_percentage: 75%;
 $smaller_layout_percentage: 25%;
 
@@ -69,7 +70,7 @@ body {
   margin: 0 auto;
 }
 
-//ASDASD
+//Loading animation
 @keyframes progress-animation {
   0% {
     width: 100%;
@@ -100,7 +101,7 @@ body {
     width: 100%;
     color: #f3f3f3;
     transition: width;
-    animation: progress-animation 12s infinite;
+    animation: progress-animation $animation_time_page_reel infinite 200ms;
     animation-name: none;
     transition-timing-function: linear;
     box-shadow: -2px 2px 10px fade_out($color_black, 0.5);
