@@ -59,10 +59,11 @@ public class TwitterService {
                         .author(status.getUser().getName())
                         .authorImg(status.getUser().getBiggerProfileImageURL())
                         .city(status.getUser().getLocation())
-                        .contentLink(getMediaIfExists(status))
                         .location(getGeo(status))
+                        .contentLink(getMediaIfExists(status))
                         .id(String.valueOf(status.getId()))
                         .platform(Platform.TWITTER)
+                        .date(status.getCreatedAt().toString())
                         .replies(getReplies(status))
                         .build())
                 .collect(Collectors.toList());
@@ -87,14 +88,17 @@ public class TwitterService {
 
     private List<Post> getReplies(Status status) {
         ArrayList<Status> replies = fetchReplies(status.getUser().getScreenName(), status.getId());
-        return mapToPosts(replies);
+        return mapTwitterRepliesToPosts(replies);
     }
 
-    private List<Post> mapToPosts(ArrayList<Status> replies2) {
-        return replies2.stream().map(status ->
+    private List<Post> mapTwitterRepliesToPosts(ArrayList<Status> resplies) {
+        return resplies.stream().map(status ->
                 Post.builder()
                         .author(status.getUser().getName())
                         .message(status.getText())
+                        .date(status.getCreatedAt().toString())
+                        .city(status.getUser().getLocation())
+                        .location(getGeo(status))
                         .build()
         ).collect(Collectors.toList());
     }

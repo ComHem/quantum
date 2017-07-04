@@ -18,7 +18,7 @@ import static java.util.Arrays.asList;
 @Service
 public class GeoCodeService {
 
-    public static final String GEO_CODE_ADDRESS_SEARCH_API = "http://maps.googleapis.com/maps/api/geocode/json?address={searchTerm}&sensor=false";
+    private static final String GEO_CODE_ADDRESS_SEARCH_API = "http://maps.googleapis.com/maps/api/geocode/json?address={searchTerm}&sensor=false";
     private final RestTemplate restTemplate;
 
     @Autowired
