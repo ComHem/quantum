@@ -27,7 +27,8 @@ const common = {
             test: /\.(jpg|jpeg|gif|png)$/,
             loader: 'url-loader',
             query: {
-                limit: 10000
+                limit: 10000,
+                useRelativePath: true
             }
         }, {
             test: /\.(woff|woff2|eot|ttf|svg)$/,

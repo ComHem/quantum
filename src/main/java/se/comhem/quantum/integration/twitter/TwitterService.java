@@ -1,5 +1,6 @@
 package se.comhem.quantum.integration.twitter;
 
+import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,21 +59,25 @@ public class TwitterService {
 
     private List<Post> mapTwitterStatuses(QueryResult result) {
         return result.getTweets().stream()
-                .filter(status -> status.getInReplyToStatusId() == -1)
-                .map(status -> Post.builder()
-                        .id(String.valueOf(status.getId()))
-                        .message(status.getText())
-                        .author(status.getUser().getName())
-                        .authorImg(status.getUser().getBiggerProfileImageURL())
-                        .city(status.getUser().getLocation())
-                        .location(getGeo(status))
-                        .contentLink(getMediaIfExists(status))
-                        .platform(Platform.TWITTER)
-                        .date(DateUtils.fromDate(status.getCreatedAt()))
-                        .updateDate(DateUtils.fromDate(status.getCreatedAt()))
-                        .replies(getReplies(status))
-                        .build())
-                .collect(toList());
+            .filter(status -> status.getInReplyToStatusId() == -1)
+            .map(status -> Post.builder()
+                .id(String.valueOf(status.getId()))
+                .message(status.getText())
+                .author(status.getUser().getName())
+                .authorImg(status.getUser().getBiggerProfileImageURL())
+                .city(status.getUser().getLocation())
+                .location(getGeo(status))
+                .contentLink(getMediaIfExists(status))
+                .platform(Platform.TWITTER)
+                .date(DateUtils.fromDate(status.getCreatedAt()))
+                .updateDate(DateUtils.fromDate(status.getCreatedAt()))
+                .replies(getReplies(status))
+                .reactions(ImmutableMap.of(
+                    "RETWEET", (long) status.getRetweetCount(),
+                    "FAVORITE", (long) status.getFavoriteCount()
+                ))
+                .build())
+            .collect(toList());
     }
 
     private String getMediaIfExists(Status status) {
@@ -109,6 +114,10 @@ public class TwitterService {
                 .updateDate(DateUtils.fromDate(status.getCreatedAt()))
                 .city(status.getUser().getLocation())
                 .location(getGeo(status))
+                .reactions(ImmutableMap.of(
+                    "RETWEET", (long) status.getRetweetCount(),
+                    "FAVORITE", (long) status.getFavoriteCount()
+                ))
                 .build()
         ).collect(toList());
     }

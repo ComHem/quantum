@@ -5,8 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.Singular;
 
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -24,6 +27,8 @@ public class PostDto {
     private String contentLink;
     private String city;
     private List<Double> location;
-    private List<String> reactions;
+    @Singular
+    private Set<Entry<String, Long>> reactions;
+    @Singular
     private List<PostDto> replies;
 }

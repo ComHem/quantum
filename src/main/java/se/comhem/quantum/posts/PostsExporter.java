@@ -45,7 +45,7 @@ public class PostsExporter {
         postsCache.getPosts();
     }
 
-    @Scheduled(initialDelay = 1000, fixedDelay = FIFTEEN_MINUTES)
+    @Scheduled(initialDelay = FIFTEEN_MINUTES, fixedDelay = FIFTEEN_MINUTES)
     public void exportLatestPosts() {
         log.info("Export latest posts...");
         List<Post> facebookPosts = facebookService.getLatestPosts(50);

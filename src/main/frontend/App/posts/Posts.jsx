@@ -10,7 +10,7 @@ export default class Posts extends PureComponent {
     constructor(props) {
         super(props);
         this.types = [
-            {type: "singles", displayCount: 1},
+            {type: "threads", displayCount: 1},
             {type: "threads", displayCount: 1}
         ];
 

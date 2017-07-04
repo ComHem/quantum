@@ -13,8 +13,12 @@ import se.comhem.quantum.model.Post;
 import se.comhem.quantum.util.DateUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -61,7 +65,7 @@ public class FacebookService {
             .message(post.getMessage())
             .authorImg(getProfilePicPath(post.getFrom().getId()))
             .platform(Platform.FACEBOOK)
-            .reactions(post.getReactions().stream().map(reaction -> reaction.getType().toString()).collect(toList()))
+            .reactions(getReactions(post))
             .contentLink(Optional.ofNullable(post.getAttachments())
                 .flatMap(attachments -> attachments.stream()
                     .findFirst()
@@ -81,6 +85,12 @@ public class FacebookService {
                     .build())
                 .collect(toList()))
             .build();
+    }
+
+    private Map<String, Long> getReactions(facebook4j.Post post) {
+        return post.getReactions().stream()
+            .map(reaction -> reaction.getType().toString())
+            .collect(groupingBy(Function.identity(), Collectors.counting()));
     }
 
     private String getProfilePicPath(String userId) {
