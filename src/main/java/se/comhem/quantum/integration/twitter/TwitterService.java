@@ -51,7 +51,7 @@ public class TwitterService {
     }
 
     private QueryResult fetchData(int numberOfTweets) throws TwitterException {
-        Query query = new Query("#comhem OR #comhemab OR @comhemab OR @comhem to:comhemab -filter:retweets").resultType(Query.ResultType.recent);
+        Query query = new Query("#comhem OR #comhemab OR @comhemab OR comhemab OR comhem OR @comhem to:comhemab -filter:retweets").resultType(Query.ResultType.recent);
         query.count(numberOfTweets);
         return twitter.search(query);
     }
