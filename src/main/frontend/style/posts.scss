@@ -3,8 +3,8 @@
 @mixin border_on_post_children($color) {
   color: $color;
   .message--item__single--content, .message--item__thread--content, .message-thread__children--container {
-    border: 4px solid $color;
-    box-shadow: 8px 8px 2px fade_out($color, 0.6);
+    border: 2px solid fade_out($color, 0.1);
+    box-shadow: 6px 6px 2px fade_out($color, 0.8);
 
     .hashtag, .fa, .author-name {
       color: $color;
@@ -23,7 +23,7 @@
   height: 100%;
   -moz-user-select: none;
 
-  .fa-facebook, .facebook {
+  .fa-facebook, .facebook, .FACEBOOK {
     $fb_color: #3B5998;
     @include border_on_post_children($fb_color);
   }
@@ -32,13 +32,14 @@
     position: relative;
     margin-top: 10px;
     margin-right: 15px;
+
     .fa-commenting {
       position: absolute;
       right: 0;
     }
   }
 
-  .fa-twitter, .twitter {
+  .fa-twitter, .twitter, .TWITTER {
     $twitter_color: #1DA1F2;
     @include border_on_post_children($twitter_color);
   }
@@ -86,7 +87,7 @@
   }
 
   &:nth-child(1 .thread-replies) {
-    border-top: none;
+    border: none;
   }
 
   .thread-replies {
