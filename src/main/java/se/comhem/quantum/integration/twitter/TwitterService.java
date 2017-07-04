@@ -105,10 +105,11 @@ public class TwitterService {
     private List<Double> getGeo(Status status) {
         return Optional.ofNullable(status.getGeoLocation())
             .map(geoLocation -> asList(geoLocation.getLatitude(), geoLocation.getLongitude()))
-            .orElseGet(() -> getGeoFromCity(status.getUser().getLocation()));
+            .orElse(null);
+//            .orElseGet(() -> getGeoFromCity(status.getUser().getLocation()));
     }
 
     private List<Double> getGeoFromCity(String cityName) {
-        return geoCodeService.getGeoLocation(cityName);
+        return geoCodeService.getGeoLocation(cityName); // TODO: Rate limited, may need credentials https://developers.google.com/maps/documentation/geocoding/usage-limits
     }
 }
