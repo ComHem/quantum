@@ -63,7 +63,7 @@ export default class Posts extends PureComponent {
 
     fetchWhenEmpty(type) {
         if (this.props[type.type].length < type.displayCount) {
-            this.props.fetchFeed()
+            this.props.fetchFeed(type)
         }
     }
 }

@@ -12,7 +12,7 @@ export const feedReducer = (state = {}, action) => {
             if (action.postsType) {
                 return {
                     ...state,
-                    [action.postType]: action.feed[action.postType],
+                    [action.postsType.type]: action.feed[action.postsType.type],
                     progress: true
                 };
             } else {
