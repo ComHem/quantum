@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import se.comhem.quantum.integration.eventhub.EventHubReadService;
 import se.comhem.quantum.model.Post;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @Slf4j
@@ -26,6 +28,8 @@ public class PostsCache {
 
     @Cacheable("posts")
     public List<Post> getPosts() {
-        return eventHubReadService.read();
+        List<Post> posts = eventHubReadService.read();
+        Collections.shuffle(posts, new Random(System.currentTimeMillis()));
+        return posts;
     }
 }
