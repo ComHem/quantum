@@ -4,10 +4,6 @@ import {Map, Marker, TileLayer} from 'react-leaflet';
 import {divIcon} from 'leaflet';
 
 export class MapBackground extends Component {
-    componentDidMount() {
-        // this.props.fetchCityLocation("Stockholm"); //TODO : Location of tweets.
-    }
-
     calculateCoordinates = function (latest) {
         if (!_.isEmpty(latest.location)) {
             return [latest.location[0], latest.location[1]];
@@ -16,18 +12,17 @@ export class MapBackground extends Component {
         }
     };
 
+    createMarkerList({position, icon}) {
+
+    }
+
     render() {
-        const icon = divIcon({
+        const defaultMapPosition = [this.props.defaultMapPosition.lat, this.props.defaultMapPosition.lng];
+        const parentMarkerIcon = divIcon({
             className: 'map-marker-icon',
             iconSize: [25, 41]
         });
-        const commentIcon = divIcon({
-            className: 'map-comment-icon',
-            iconSize: [25, 41]
-        });
 
-
-        const defaultMapPosition = [this.props.defaultMapPosition.lat, this.props.defaultMapPosition.lng];
         return (
             <Map center={defaultMapPosition}
                  zoom={4.5}
@@ -40,21 +35,27 @@ export class MapBackground extends Component {
                 {this.props.feed.posts && this.props.feed.posts.map((latest, i) => {
                     return (
                         <span>
-                    <Marker key={i}
-                            position={this.calculateCoordinates(latest)}
-                            draggable={false}
-                            icon={commentIcon}/>
+                            <Marker key={i}
+                                    position={this.calculateCoordinates(latest)}
+                                    draggable={false}
+                                    icon={parentMarkerIcon}/>
 
-                            {latest.replies && latest.replies.map((replie, x) => {
-                                return (
-                                    <Marker key={x}
-                                            position={this.calculateCoordinates(replie)}
-                                            draggable={false}
-                                            icon={commentIcon}/>
-                                );
-                            })}</span>
+                            {latest.replies && latest.replies.map((reply, j) => {
+                                    let commentIcon = divIcon({
+                                        className: `map-marker-icon map-marker-icon--${j + 1}`,
+                                        iconSize: [25, 41]
+                                    });
+                                    console.info(`map-marker-icon--${j + 1}`);
+                                    return (
+                                        <Marker key={j}
+                                                position={this.calculateCoordinates(reply)}
+                                                draggable={false}
+                                                icon={commentIcon}/>
+                                    )
+                                }
+                            )}
+                        </span>
                     );
-
                 })}
             </Map>
         );
