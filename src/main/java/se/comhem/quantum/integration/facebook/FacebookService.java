@@ -12,6 +12,7 @@ import se.comhem.quantum.model.Platform;
 import se.comhem.quantum.model.Post;
 import se.comhem.quantum.util.DateUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -74,6 +75,7 @@ public class FacebookService {
             .date(DateUtils.fromDate(post.getCreatedTime()))
             .updateDate(DateUtils.fromDate(post.getUpdatedTime()))
             .author(post.getFrom().getName())
+            .location(Arrays.asList(59.33319939999999, 18.0444084)) // TODO: Hardcoded to Stockholm right now
             .replies(post.getComments().stream()
                 .map(comment -> Post.builder()
                     .id(comment.getId())
