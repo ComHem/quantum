@@ -25,7 +25,7 @@ public class PostDto {
     private String author;
     private String authorImg;
     private String contentLink;
-    private String city;
+    private String place;
     private List<Double> location;
     @Singular
     private Set<Entry<String, Long>> reactions;

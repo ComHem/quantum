@@ -31,7 +31,7 @@ public class Post {
     private String author;
     private String authorImg;
     private String contentLink;
-    private String city;
+    private String place;
     private List<Double> location;
     @Singular
     private Map<String, Long> reactions;

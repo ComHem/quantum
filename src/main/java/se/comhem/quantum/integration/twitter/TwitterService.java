@@ -79,7 +79,7 @@ public class TwitterService {
             .message(status.getText())
             .author(status.getUser().getName())
             .authorImg(status.getUser().getBiggerProfileImageURL())
-            .city(status.getUser().getLocation())
+            .place(status.getPlace() != null ? status.getPlace().getFullName() : status.getUser().getLocation())
             .location(getGeo(status))
             .contentLink(getMediaIfExists(status))
             .platform(Platform.TWITTER)
