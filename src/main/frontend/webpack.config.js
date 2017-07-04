@@ -25,7 +25,10 @@ const common = {
             loaders: ['style-loader', 'css-loader', 'sass-loader']
         }, {
             test: /\.(jpg|jpeg|gif|png)$/,
-            loader: 'url-loader?limit=9999999999&name=[name].[ext]'
+            loader: 'url-loader',
+            query: {
+                limit: 10000
+            }
         }, {
             test: /\.(woff|woff2|eot|ttf|svg)$/,
             loader: 'url-loader?limit=9999999999'
