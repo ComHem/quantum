@@ -6,9 +6,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.Singular;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.String.format;
 
@@ -18,7 +20,7 @@ import static java.lang.String.format;
 @NoArgsConstructor
 @Builder
 public class Post {
-    public static final Long serialVersionUID = 6L;
+    public static final Long serialVersionUID = 9L;
 
     private String id;
     private LocalDateTime date;
@@ -31,7 +33,9 @@ public class Post {
     private String contentLink;
     private String city;
     private List<Double> location;
-    private List<String> reactions;
+    @Singular
+    private Map<String, Long> reactions;
+    @Singular
     private List<Post> replies;
 
     @JsonProperty("key")

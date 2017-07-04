@@ -25,7 +25,8 @@ public class FeedService {
     public FeedService(PostsCache postsCache) {
         this.postsCache = postsCache;
         this.modelMapper = new ModelMapper();
-        this.modelMapper.createTypeMap(Post.class, PostDto.class);
+        this.modelMapper.createTypeMap(Post.class, PostDto.class)
+            .addMapping(src -> src.getReactions().entrySet(), PostDto::setReactions);
         this.modelMapper.addConverter(new AbstractConverter<LocalDateTime, String>() {
             @Override
             protected String convert(LocalDateTime localDateTime) {
