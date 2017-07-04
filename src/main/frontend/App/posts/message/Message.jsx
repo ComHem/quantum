@@ -26,20 +26,20 @@ export default class Message extends PureComponent {
     }
 
     getFormattedDate() {
-        //return moment(new Date(this.props.post.date)); //TODO JavaFix. Fix in Mapper, need more fix.
-        return "DATE";
+        return moment(new Date(this.props.post.date)).calendar();
     }
 
     render() {
         return (
             <div className={`message--item message--item__${this.type} ${this.props.post.platform}`}>
                 <div className={`message--item__single--content`}>
+                    <div className="message--item--platform-icon">
+                        {this.props.getPlatformIcon(this.props.post.platform)}
+                    </div>
                     <div className="author--icon__container">
                         <div className="author--icon__pull-left">
                             <img className="author-icon" src={this.props.post.authorImg}/>
-                            <div className="message--item--platform-icon">
-                                {this.props.getPlatformIcon(this.props.post.platform)}
-                            </div>
+
                         </div>
                         <div className="message--item__description">
                             <p className="author-name">{this.props.post.author}</p>
@@ -61,7 +61,9 @@ export default class Message extends PureComponent {
                         <div className="message--item--comment-icon">
                             <i className="fa fa-commenting"/>
                         </div>
-                        {this.props.post.replies.map((post, j) => <ThreadReplies key={j} getStyledMessage={this.getStyledMessage.bind(this)} post={post}/>)}
+                        {this.props.post.replies.map((post, j) => <ThreadReplies key={j}
+                                                                                 getStyledMessage={this.getStyledMessage.bind(this)}
+                                                                                 post={post}/>)}
                     </div> : null
                 }
             </div>
