@@ -3,6 +3,7 @@ import ThreadReplies from './thread-replies/ThreadReplies';
 import reactStringReplace from 'react-string-replace';
 import moment from 'moment';
 import moment_se from 'moment/locale/sv';
+import CountTo from './counter/CountTo';
 
 
 export default class Message extends PureComponent {
@@ -32,18 +33,24 @@ export default class Message extends PureComponent {
     render() {
         return (
             <div className={`message--item message--item__${this.type} ${this.props.post.platform}`}>
+
+
                 <div className={`message--item__single--content`}>
                     <div className="author--icon__container">
+
                         <div className="author--icon__pull-left">
                             <img className="author-icon" src={this.props.post.authorImg}/>
+
                             <div className="message--item--platform-icon">
                                 {this.props.getPlatformIcon(this.props.post.platform)}
                             </div>
+
                         </div>
                         <div className="message--item__description">
                             <p className="author-name">{this.props.post.author}</p>
                             <p className="date">{this.getFormattedDate()}</p>
                         </div>
+                        {this.props.post.reactions && this.getReactions()}
                     </div>
                     <div className={`message--item--body__single`}>
                         <div className="message--body--wrapper">
@@ -67,5 +74,27 @@ export default class Message extends PureComponent {
                 }
             </div>
         );
+    }
+
+    getReactionIcon(reactionType) {
+        return (<i className={`fa fa-${reactionType.toString().toLowerCase()}`}/>);
+
+    }
+
+    getReactions() {
+
+        return (this.props.post.reactions.map((reaction, i) => {
+
+                return <span className="reactions" key={i}>
+                    <span>
+                        {this.getReactionIcon(Object.keys(reaction))}
+                       </span>
+                    <CountTo to={Object.values(reaction)} speed={1234}>
+                    </CountTo>
+                </span>
+
+
+            }
+        ))
     }
 }
