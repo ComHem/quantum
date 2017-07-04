@@ -26,8 +26,7 @@ export default class Message extends PureComponent {
     }
 
     getFormattedDate() {
-        //return moment(new Date(this.props.post.date)); //TODO JavaFix. Fix in Mapper, need more fix.
-        return "DATE";
+        return moment(new Date(this.props.post.date)).calendar();
     }
 
     render() {
@@ -61,7 +60,9 @@ export default class Message extends PureComponent {
                         <div className="message--item--comment-icon">
                             <i className="fa fa-commenting"/>
                         </div>
-                        {this.props.post.replies.map((post, j) => <ThreadReplies key={j} getStyledMessage={this.getStyledMessage.bind(this)} post={post}/>)}
+                        {this.props.post.replies.map((post, j) => <ThreadReplies key={j}
+                                                                                 getStyledMessage={this.getStyledMessage.bind(this)}
+                                                                                 post={post}/>)}
                     </div> : null
                 }
             </div>
