@@ -9,7 +9,9 @@ import se.comhem.quantum.integration.geocode.GeoCodeService;
 import se.comhem.quantum.model.Platform;
 import se.comhem.quantum.model.Post;
 import se.comhem.quantum.util.DateUtils;
+import twitter4j.GeoLocation;
 import twitter4j.MediaEntity;
+import twitter4j.Place;
 import twitter4j.Query;
 import twitter4j.Status;
 import twitter4j.Twitter;
@@ -17,6 +19,7 @@ import twitter4j.TwitterException;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -105,8 +108,25 @@ public class TwitterService {
     private List<Double> getGeo(Status status) {
         return Optional.ofNullable(status.getGeoLocation())
             .map(geoLocation -> asList(geoLocation.getLatitude(), geoLocation.getLongitude()))
-            .orElse(null);
+            .orElseGet(() -> getGeoFromPlace(status.getPlace()));
 //            .orElseGet(() -> getGeoFromCity(status.getUser().getLocation()));
+    }
+
+    private List<Double> getGeoFromPlace(Place place) {
+        if (place != null && place.getBoundingBoxCoordinates() != null) {
+            try {
+                // TODO: Figure out something better here
+                Double maxLat = Arrays.stream(place.getBoundingBoxCoordinates()[0]).map(GeoLocation::getLatitude).max(Comparator.comparingDouble(value -> value)).get();
+                Double minLat = Arrays.stream(place.getBoundingBoxCoordinates()[0]).map(GeoLocation::getLatitude).min(Comparator.comparingDouble(value -> value)).get();
+                Double maxLong = Arrays.stream(place.getBoundingBoxCoordinates()[0]).map(GeoLocation::getLongitude).max(Comparator.comparingDouble(value -> value)).get();
+                Double minLong = Arrays.stream(place.getBoundingBoxCoordinates()[0]).map(GeoLocation::getLongitude).min(Comparator.comparingDouble(value -> value)).get();
+                double centerLatitude = ( minLat + maxLat ) / 2;
+                double centerLongitude = ( minLong + maxLong ) / 2;
+                return Arrays.asList(centerLatitude, centerLongitude);
+            } catch (Exception e) {
+            }
+        }
+        return null;
     }
 
     private List<Double> getGeoFromCity(String cityName) {
