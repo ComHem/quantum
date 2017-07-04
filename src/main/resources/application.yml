@@ -25,3 +25,4 @@ quantum:
     consumerSecret: ${QUANTUM_TWITTER_CONSUMER_SECRET}
     accessToken: ${QUANTUM_TWITTER_ACCESS_TOKEN}
     accessTokenSecret: ${QUANTUM_TWITTER_ACCESS_TOKEN_SECRET}
+    queries: "#comhem;#comhemab;@comhemab;comhemab;comhem;@comhem;to:comhemab;from:comhemab"

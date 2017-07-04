@@ -81,6 +81,7 @@ public class EventHubReadService {
                 .skip(Math.max(0, events.size() - 100))
                 .filter(this::compatibleSerializedVersion)
                 .flatMap(this::deserialize)
+                .distinct()
                 .collect(collectingAndThen(toList(), Lists::reverse));
             log.info("Took {} ms to fetch {} events (after filtering {} posts)", System.currentTimeMillis() - start, events.size(), posts.size());
             return posts;

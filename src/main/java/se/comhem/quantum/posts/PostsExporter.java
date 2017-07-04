@@ -49,13 +49,12 @@ public class PostsExporter {
     public void exportLatestPosts() {
         log.info("Export latest posts...");
         List<Post> facebookPosts = facebookService.getLatestPosts(50);
-        List<Post> tweets = twitterService.getTweets(20);
+        List<Post> tweets = twitterService.getTweets(100);
         Map<String, Post> postsCached = postsCache.getPosts().stream().collect(Collectors.toMap(Post::getKey, p -> p));
 
-        List<Post> postsToExport = Stream.concat(
-            filterExport(postsCached, facebookPosts),
-            filterExport(postsCached, tweets)
-        ).sorted(Comparator.comparing(Post::getUpdateDate)).collect(toList());
+        List<Post> postsToExport = Stream.concat(filterExport(facebookPosts, postsCached), filterExport(tweets, postsCached))
+            .sorted(Comparator.comparing(Post::getUpdateDate))
+            .collect(toList());
         eventHubWriteService.send(postsToExport);
         log.info("Exported {} facebook posts and {} tweets", facebookPosts.size(), tweets.size());
 
@@ -64,7 +63,7 @@ public class PostsExporter {
         log.info("Cache updated with {} posts/tweets", newPostsCached.size());
     }
 
-    private Stream<Post> filterExport(Map<String, Post> postsCached, List<Post> newPosts) {
+    private Stream<Post> filterExport(List<Post> newPosts, Map<String, Post> postsCached) {
         return newPosts.stream().filter(newPost -> PostFilter.newOrUpdatedPost(newPost, postsCached));
     }
 }

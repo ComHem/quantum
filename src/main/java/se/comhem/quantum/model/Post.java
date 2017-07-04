@@ -20,7 +20,7 @@ import static java.lang.String.format;
 @NoArgsConstructor
 @Builder
 public class Post {
-    public static final Long serialVersionUID = 9L;
+    public static final Long serialVersionUID = 10L;
 
     private String id;
     private LocalDateTime date;
@@ -41,5 +41,20 @@ public class Post {
     @JsonProperty("key")
     public String getKey() {
         return format("%s_%s", platform.toString().toLowerCase(), id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Post post = (Post) o;
+
+        return getKey() != null ? getKey().equals(post.getKey()) : post.getKey() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return getKey() != null ? getKey().hashCode() : 0;
     }
 }
