@@ -2,17 +2,23 @@
 @import "colors";
 
 .leaflet-container {
-  z-index: 0;
-  top: 0;
-  position: absolute;
-  display: block;
-  height: 100%;
-  width: 25%;
-  background: $bg_color;
+    z-index: 0;
+    top: 0;
+    position: absolute;
+    display: block;
+    height: 100%;
+    width: 25%;
+    background: $bg_color;
 }
 
 .map-marker-icon {
-  background: url('~leaflet/dist/images/marker-icon.png');
-  width: 100%;
-  height: 100%;
+    background: url('~leaflet/dist/images/marker-icon.png');
+    width: 100%;
+    height: 100%;
+}
+
+.map-comment-icon {
+    background: url('../comment-icon.png');
+    width: 100%;
+    height: 100%;
 }

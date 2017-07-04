@@ -21,29 +21,43 @@ export class MapBackground extends Component {
             className: 'map-marker-icon',
             iconSize: [25, 41]
         });
+        const commentIcon = divIcon({
+            className: 'map-comment-icon',
+            iconSize: [25, 41]
+        });
 
 
-            const defaultMapPosition = [this.props.defaultMapPosition.lat, this.props.defaultMapPosition.lng];
-            return (
-                <Map center={defaultMapPosition}
-                     zoom={4.5}
-                     animate={true}
-                     zoomControl={false}
-                     scrollWheelZoom={false}>
+        const defaultMapPosition = [this.props.defaultMapPosition.lat, this.props.defaultMapPosition.lng];
+        return (
+            <Map center={defaultMapPosition}
+                 zoom={4.5}
+                 animate={true}
+                 zoomControl={false}
+                 scrollWheelZoom={false}>
 
-                    <TileLayer url='http://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png'/>
+                <TileLayer url='http://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png'/>
 
-                    {this.props.feed.posts && this.props.feed.posts.map((latest, i) => {
-                        return (
-                            <Marker key={i}
-                                    position={this.calculateCoordinates(latest)}
-                                    draggable={false}
-                                    icon={icon}
-                                    ref="marker"/>
-                        );
-                    })}
-                </Map>
-            );
+                {this.props.feed.posts && this.props.feed.posts.map((latest, i) => {
+                    return (
+                        <span>
+                    <Marker key={i}
+                            position={this.calculateCoordinates(latest)}
+                            draggable={false}
+                            icon={commentIcon}/>
+
+                            {latest.replies && latest.replies.map((replie, x) => {
+                                return (
+                                    <Marker key={x}
+                                            position={this.calculateCoordinates(replie)}
+                                            draggable={false}
+                                            icon={commentIcon}/>
+                                );
+                            })}</span>
+                    );
+
+                })}
+            </Map>
+        );
     }
 }
 
