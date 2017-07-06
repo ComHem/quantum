@@ -14,15 +14,16 @@ quantum:
   eventhub:
     writeConnectionString: ${QUANTUM_EVENTHUB_WRITE_CONNECTION_STRING}
     readConnectionString: ${QUANTUM_EVENTHUB_READ_CONNECTION_STRING}
+    partition: ${QUANTUM_EVENTHUB_PARTITION:1}
   facebook:
     appId: ${QUANTUM_FB_APP_ID}
     appSecret: ${QUANTUM_FB_APP_SECRET}
     accessToken: ${QUANTUM_FB_ACCESS_TOKEN}
     page: ${QUANTUM_FB_PAGE:comhem}
-    fields: hometown,location,created_time,updated_time,message,comments,properties,reactions,tags,picture,fullPicture,story,storyTags,whiteTags,place,link,name,to,from,icon,actions,sharesCount,statusType,attachments,parentId,user_location,user_hometown
   twitter:
     consumerKey: ${QUANTUM_TWITTER_CONSUMER_KEY}
     consumerSecret: ${QUANTUM_TWITTER_CONSUMER_SECRET}
     accessToken: ${QUANTUM_TWITTER_ACCESS_TOKEN}
     accessTokenSecret: ${QUANTUM_TWITTER_ACCESS_TOKEN_SECRET}
-    queries: "#comhem;#comhemab;@comhemab;comhemab;comhem;@comhem;to:comhemab;from:comhemab"
+    queries: ${QUANTUM_TWITTER_QUERIES:"#comhem;#comhemab;@comhemab;comhemab;comhem;@comhem;to:comhemab;from:comhemab"}
+

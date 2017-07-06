@@ -10,6 +10,7 @@ import com.microsoft.azure.servicebus.ServiceBusException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import se.comhem.quantum.model.Post;
 
@@ -30,19 +31,24 @@ public class EventHubReadService {
     private static long ESTIMATE_MESSAGE_SIZE = 2000L;
     private static int NUMBER_OF_MESSAGES_TO_READ = 100;
 
+
     private final EventHubClient eventHubReadClient;
+    private final String partition;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public EventHubReadService(@Qualifier("eventHubReadClient") EventHubClient eventHubReadClient, ObjectMapper objectMapper) throws ServiceBusException {
+    public EventHubReadService(@Qualifier("eventHubReadClient") EventHubClient eventHubReadClient,
+                               @Value("${quantum.eventhub.partition}") String partition,
+                               ObjectMapper objectMapper) throws ServiceBusException {
         this.eventHubReadClient = eventHubReadClient;
+        this.partition = partition;
         this.objectMapper = objectMapper;
     }
 
     public List<Post> read() {
         PartitionReceiver receiver = null;
         try {
-            receiver = eventHubReadClient.getPartitionRuntimeInformation("1")
+            receiver = eventHubReadClient.getPartitionRuntimeInformation(partition)
                 .thenApply(this::calculateStartingOffset)
                 .thenCompose(this::createReceiverForOffset)
                 .get();
@@ -66,7 +72,7 @@ public class EventHubReadService {
 
     private CompletionStage<PartitionReceiver> createReceiverForOffset(String offset) {
         try {
-            return eventHubReadClient.createReceiver(EventHubClient.DEFAULT_CONSUMER_GROUP_NAME, "1", offset, true);
+            return eventHubReadClient.createReceiver(EventHubClient.DEFAULT_CONSUMER_GROUP_NAME, partition, offset, true);
         } catch (ServiceBusException e) {
             log.error("Failed to create receiver: " + e.getMessage(), e);
             throw new RuntimeException(e);
