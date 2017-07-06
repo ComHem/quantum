@@ -8,7 +8,7 @@ $smallText: 11pt;
     border: 2px solid fade_out($color, 0.1);
     box-shadow: 6px 6px 2px fade_out($color, 0.8);
 
-    .hashtag, .fa, .author-name {
+    .hashtag, .fa, .author-name, .reaction__count {
       color: $color;
       text-decoration: none;
     }
@@ -123,7 +123,7 @@ $smallText: 11pt;
 
   img {
     width: 100%;
-    max-height: 100%;
+    max-height: 80%;
     height: auto;
     vertical-align: middle;
     -ms-interpolation-mode: bicubic;
@@ -187,5 +187,5 @@ $smallText: 11pt;
 }
 
 .date {
-    color: fade_out($color_black, 0.3);
+  color: fade_out($color_black, 0.3);
 }

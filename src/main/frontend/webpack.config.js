@@ -13,7 +13,7 @@ const common = {
     ],
     output: {
         path: PATHS.output,
-        publicPath: '',
+        publicPath: 'http://localhost:9090/',
         filename: 'bundle.js'
     },
     module: {
@@ -28,7 +28,7 @@ const common = {
             loader: 'url-loader',
             query: {
                 limit: 10000,
-                useRelativePath: true
+                useRelativePath: false
             }
         }, {
             test: /\.(woff|woff2|eot|ttf|svg)$/,

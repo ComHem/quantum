@@ -1,50 +1,70 @@
-.reactions{
-    padding: 10px;
+@mixin fb-reaction-icon($icon) {
+  background: url("../img/fb/" + $icon + ".png");
+  background-size: contain;
+  width: inherit;
+  height: inherit;
 }
 
+.reactions {
+  position: relative;
+  display: inline-block;
+  margin-left: 10px;
 
-.reaction-like:before {
-    content: "\f164";
-    padding:10px;
-}
+  .reaction__count {
+    display: inline-block;
+    margin: 0 10px;
+    line-height: 20px;
 
-.reaction-favorite:before{
-    content: "\f005";
-    padding:10px;
-}
-.reaction-retweet:before{
-    content: "\f079";
-    padding:10px;
-}
-.reaction-love:before {
-    content: "\f004";
-    padding:10px;
-}
+    span {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 25px;
+      right: 0;
+      margin: auto;
+      vertical-align: middle;
+    }
+  }
 
-.reaction-angry:before {
-    content: "\f165";
-    padding:10px;
-}
-.reaction-wow:before {
-    content: "\f25b";
-    padding:10px;
-}
-.reaction-haha:before {
-    content: "\f118";
-    padding:10px;
-}
+  .reaction__icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
 
-.reaction-sad:before {
-    content: "\f119";
-    padding:10px;
-}
+    //TWITTER
+    .reaction-favorite:before {
+      content: "\f004";
+    }
 
-.reaction-thankful:before {
-    content: "\🌸";
-    padding:10px;
-}
+    .reaction-retweet:before {
+      content: "\f079";
+    }
 
-.reaction-pride:before {
-    content: "\🏳️‍🌈";
-    padding:10px;
+    //FACEBOOK
+    .reaction-like {
+      @include fb-reaction-icon("like");
+    }
+    .reaction-love {
+      @include fb-reaction-icon("love");
+    }
+    .reaction-angry {
+      @include fb-reaction-icon("angry");
+    }
+    .reaction-wow {
+      @include fb-reaction-icon("wow");
+    }
+    .reaction-haha {
+      @include fb-reaction-icon("haha");
+    }
+    .reaction-sad {
+      @include fb-reaction-icon("sad");
+    }
+    .reaction-thankful:before {
+      content: "\🌸";
+    }
+    .reaction-pride:before {
+      content: "\🏳️‍🌈";
+    }
+  }
+
 }

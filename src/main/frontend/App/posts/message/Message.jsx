@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import ThreadReplies from './thread-replies/ThreadReplies';
 import reactStringReplace from 'react-string-replace';
 import moment from 'moment';
-import moment_se from 'moment/locale/sv';
+import _ from 'lodash';
 import CountTo from './counter/CountTo';
 import '../../../style/reactions.scss';
 
@@ -81,12 +81,14 @@ export default class Message extends PureComponent {
 
     getReactions() {
         return (this.props.post.reactions.map((reaction, i) => (
-                <span className="reactions" key={i}>
-                    <span>
-                        <i className={`fa reaction-${Object.keys(reaction).toString().toLowerCase()}`}/>
-                    </span>
-                    <CountTo to={Object.values(reaction)} speed={2000}/>
-                </span>
+                <div className="reactions" key={i}>
+                    <div className="reaction__icon">
+                        <div className={`fa reaction-${Object.keys(reaction).toString().toLowerCase()}`}/>
+                    </div>
+                    <div className="reaction__count">
+                        <CountTo to={Object.values(reaction)} speed={2000}/>
+                    </div>
+                </div>
             ))
         )
     }
