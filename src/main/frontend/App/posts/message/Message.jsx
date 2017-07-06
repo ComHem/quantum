@@ -17,7 +17,7 @@ export default class Message extends PureComponent {
 
     getStyledMessage(message = this.props.post.message) {
         const hashTags = /#([\w]+)/gi;
-        const atTags = /@([\w]+)/gi;
+        const atTags = /@([\w\d]+)/gi;
         const hrefs = /([\w]+:\/\/[\w-?&;#~=.\/@]+[\w\/])/gi;
 
         let hashReplace = reactStringReplace(message, hashTags, (match) => (
