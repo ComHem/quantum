@@ -2,6 +2,13 @@
 
 $smallText: 11pt;
 
+.comment-indicator {
+  display: block;
+  text-align: left;
+  padding: 4px 20px;
+}
+
+
 @mixin border_on_post_children($color) {
   color: $color;
   .message--item__single--content, .message--item__thread--content, .message-thread__children--container {
@@ -99,15 +106,22 @@ $smallText: 11pt;
     }
 
     .thread__message {
-      padding: 5px;
+      padding-left: 2px;
+
+      .thread-replies {
+        padding: 0;
+        margin: 0;
+
+        .thread-message, p {
+          padding: 0;
+          margin: 0;
+        }
+      }
     }
 
     .message--item__description {
-      display: inline-block;
-      position: absolute;
-      margin-top: 2px;
+      display: block;
       font-size: $smallText;
-      right: 10px;
     }
 
     .thread-author {

@@ -17,12 +17,15 @@ export default class ThreadReplies extends PureComponent {
                 <div className="thread__message">{this.props.children}
                     <p>{this.props.getStyledMessage(this.props.post.message)}</p>
                     {this.props.post.replies && this.props.post.replies.map((post, i) => (
-                        <ThreadReplies key={i}
-                                       getStyledMessage={this.props.getStyledMessage.bind(this)}
-                                       style={{
-                                           filter: `rotate-hue(${(i + 1) * 20}deg)`
-                                       }}
-                                       post={post}/>
+                        <div>
+                            <div className="comment-indicator">
+                                <i className="fa fa-long-arrow-down"/>
+                            </div>
+                            <ThreadReplies
+                                key={i}
+                                getStyledMessage={this.props.getStyledMessage.bind(this)}
+                                post={post}/>
+                        </div>
                     ))}
                 </div>
             </div>
