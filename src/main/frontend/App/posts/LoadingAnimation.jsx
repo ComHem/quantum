@@ -1,16 +1,16 @@
 import React, {PureComponent} from 'react';
 import '../../style/animate.scss';
-import {CSSTransitionGroup} from 'react-transition-group'
 
-export default class LoadingAnimation extends React.Component {
-    componentDidMount() {
-
+export default class LoadingAnimation extends PureComponent {
+    componentWillUpdate(nextProps) {
+        this.progressbar.style.webkitAnimationName = "none";
+        setTimeout(() => { this.progressbar.style.webkitAnimationName = "progress-animation" }, 200);
     }
 
     render() {
         return (
             <div className="quantum-progressbar-container">
-                <div className={`quantum-progressbar ${this.props.progress ? "start" : "start-again"}`}/>
+                <div ref={(node) => { this.progressbar = node}} className="quantum-progressbar"/>
             </div>
         );
     }

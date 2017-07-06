@@ -10,7 +10,7 @@ export default class Posts extends PureComponent {
     constructor(props) {
         super(props);
         this.types = [
-            {type: "singles", displayCount: 1},
+            {type: "threads", displayCount: 1},
             {type: "threads", displayCount: 1}
         ];
 
@@ -18,7 +18,7 @@ export default class Posts extends PureComponent {
     }
 
     componentDidMount() {
-        this.timer = setInterval(this.displayNewPosts, 12000);
+        this.timer = setInterval(this.displayNewPosts, 5000);
         this.props.fetchFeed();
     }
 

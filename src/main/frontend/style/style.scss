@@ -76,11 +76,21 @@ body {
     width: 100%;
     background-color: $comhem_color_1;
   }
-  20% {background-color: $comhem_color_2;}
-  40% {background-color: $comhem_color_3;}
-  60% {background-color: $comhem_color_4;}
-  80% {background-color: $comhem_color_5;}
-  90% {background-color: $comhem_color_6;}
+  20% {
+    background-color: $comhem_color_2;
+  }
+  40% {
+    background-color: $comhem_color_3;
+  }
+  60% {
+    background-color: $comhem_color_4;
+  }
+  80% {
+    background-color: $comhem_color_5;
+  }
+  90% {
+    background-color: $comhem_color_6;
+  }
   100% {
     background-color: $comhem_color_7;
     width: 0;
@@ -101,13 +111,8 @@ body {
     width: 100%;
     color: #f3f3f3;
     transition: width;
-    animation: progress-animation $animation_time_page_reel infinite 200ms;
-    animation-name: none;
+    animation: progress-animation $animation_time_page_reel infinite;
     transition-timing-function: linear;
     box-shadow: -2px 2px 10px fade_out($color_black, 0.5);
-
-    &.start, &.start-again {
-      animation-name: progress-animation;
-    }
   }
 }

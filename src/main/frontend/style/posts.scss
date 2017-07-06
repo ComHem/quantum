@@ -8,7 +8,6 @@ $smallText: 11pt;
   padding: 4px 20px;
 }
 
-
 @mixin border_on_post_children($color) {
   color: $color;
   .message--item__single--content, .message--item__thread--content, .message-thread__children--container {
@@ -108,14 +107,13 @@ $smallText: 11pt;
     .thread__message {
       padding-left: 2px;
 
+      p {
+        margin-top: 8px;
+      }
+
       .thread-replies {
         padding: 0;
         margin: 0;
-
-        .thread-message, p {
-          padding: 0;
-          margin: 0;
-        }
       }
     }
 
@@ -126,12 +124,6 @@ $smallText: 11pt;
 
     .thread-author {
       font-size: $smallText;
-    }
-
-    .thread-overflow {
-      display: block;
-      width: 100%;
-      background: #000;
     }
   }
 
@@ -162,14 +154,14 @@ $smallText: 11pt;
       display: block;
       width: 70px;
       border-radius: 50%;
-      animation: author-icon-animation 6s alternate infinite;
+      animation: author-icon-animation 6s alternate infinite ease-in-out;
 
       @keyframes author-icon-animation {
         from {
-          box-shadow: -3px 3px 10px rgba(0, 0, 0, .2);
+          box-shadow: -3px 3px 12px rgba(0, 0, 0, .25);
         }
         to {
-          box-shadow: -1px 2px 12px rgba(0, 0, 0, .7);
+          box-shadow: 3px -1px 16px rgba(5, 5, 5, .35);
         }
       }
     }
