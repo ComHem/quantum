@@ -25,7 +25,7 @@ export default class Message extends PureComponent {
         ));
 
         let atReplace = reactStringReplace(hashReplace, atTags, (match) => (
-            <span className="hashtag">@{match}</span>
+            <a className="hashtag" href={`http://twitter.com/${match}`}>@{match}</a>
         ));
 
         return reactStringReplace(atReplace, hrefs, (match) => (
