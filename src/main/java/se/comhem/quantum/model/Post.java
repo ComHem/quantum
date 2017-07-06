@@ -50,11 +50,22 @@ public class Post {
 
         Post post = (Post) o;
 
-        return getKey() != null ? getKey().equals(post.getKey()) : post.getKey() == null;
+        if (!id.equals(post.id)) return false;
+        if (!date.equals(post.date)) return false;
+        if (!updateDate.equals(post.updateDate)) return false;
+        if (platform != post.platform) return false;
+        if (!reactions.equals(post.reactions)) return false;
+        return replies.equals(post.replies);
     }
 
     @Override
     public int hashCode() {
-        return getKey() != null ? getKey().hashCode() : 0;
+        int result = id.hashCode();
+        result = 31 * result + date.hashCode();
+        result = 31 * result + updateDate.hashCode();
+        result = 31 * result + platform.hashCode();
+        result = 31 * result + reactions.hashCode();
+        result = 31 * result + replies.hashCode();
+        return result;
     }
 }
