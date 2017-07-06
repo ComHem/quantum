@@ -148,7 +148,16 @@ $smallText: 11pt;
       display: block;
       width: 70px;
       border-radius: 50%;
-      box-shadow: -3px 3px 10px rgba(0, 0, 0, 0.3);
+      animation: author-icon-animation 6s alternate infinite;
+
+      @keyframes author-icon-animation {
+        from {
+          box-shadow: -3px 3px 10px rgba(0, 0, 0, .2);
+        }
+        to {
+          box-shadow: -1px 2px 12px rgba(0, 0, 0, .7);
+        }
+      }
     }
 
     .message--item--platform-icon {
