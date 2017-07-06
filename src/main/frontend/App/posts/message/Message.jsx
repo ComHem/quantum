@@ -85,7 +85,7 @@ export default class Message extends PureComponent {
                     <span>
                         {this.getReactionIcon(Object.keys(reaction))}
                        </span>
-                    <CountTo to={Object.values(reaction)} speed={1234}>
+                    <CountTo to={Object.values(reaction)} speed={3000}>
                     </CountTo>
                 </span>
 

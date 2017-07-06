@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import Animation from '../../Animation';
+
 const propTypes = {
     from: PropTypes.number,
     to: PropTypes.number.isRequired,

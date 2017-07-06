@@ -7,6 +7,7 @@ import com.microsoft.azure.eventhubs.EventHubClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import se.comhem.quantum.model.Post;
 
@@ -20,11 +21,15 @@ import static java.util.stream.Collectors.toList;
 public class EventHubWriteService {
 
     private final EventHubClient eventHubWriteClient;
+    private final String partition;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public EventHubWriteService(@Qualifier("eventHubWriteClient") EventHubClient eventHubWriteClient, ObjectMapper objectMapper) {
+    public EventHubWriteService(@Qualifier("eventHubWriteClient") EventHubClient eventHubWriteClient,
+                                @Value("${quantum.eventhub.partition}") String partition,
+                                ObjectMapper objectMapper) {
         this.eventHubWriteClient = eventHubWriteClient;
+        this.partition = partition;
         this.objectMapper = objectMapper;
     }
 
@@ -36,7 +41,7 @@ public class EventHubWriteService {
         if (events.isEmpty()) {
             throw new RuntimeException("Failed to serialize all posts");
         }
-        eventHubWriteClient.send(events, "1")
+        eventHubWriteClient.send(events, partition)
             .whenComplete((returnValue, throwable) -> {
                 if (throwable != null) {
                     log.error("Failed to send events", throwable);

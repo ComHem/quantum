@@ -26,17 +26,16 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class FacebookService {
 
+    private static final String FIELDS = "hometown,location,created_time,updated_time,message,comments,properties,reactions,tags,picture,fullPicture,story,storyTags,whiteTags,place,link,name,to,from,icon,actions,sharesCount,statusType,attachments,parentId,user_location,user_hometown";
     private final Facebook facebook;
     private final String page;
-    private final String fields;
+
 
     @Autowired
     public FacebookService(Facebook facebook,
-                           @Value("${quantum.facebook.page}") String page,
-                           @Value("${quantum.facebook.fields}") String fields) {
+                           @Value("${quantum.facebook.page}") String page) {
         this.facebook = facebook;
         this.page = page;
-        this.fields = fields;
     }
 
     public List<Post> getLatestPosts(int numberOfPosts) {
@@ -57,7 +56,7 @@ public class FacebookService {
         return new Reading()
             .limit(numberOfPosts)
             .order(Ordering.REVERSE_CHRONOLOGICAL)
-            .fields(fields);
+            .fields(FIELDS);
     }
 
     private Post mapFacebookPost(facebook4j.Post post) {
