@@ -1,0 +1,50 @@
+.reactions{
+    padding: 10px;
+}
+
+
+.reaction-like:before {
+    content: "\f164";
+    padding:10px;
+}
+
+.reaction-favorite:before{
+    content: "\f005";
+    padding:10px;
+}
+.reaction-retweet:before{
+    content: "\f079";
+    padding:10px;
+}
+.reaction-love:before {
+    content: "\f004";
+    padding:10px;
+}
+
+.reaction-angry:before {
+    content: "\f165";
+    padding:10px;
+}
+.reaction-wow:before {
+    content: "\f25b";
+    padding:10px;
+}
+.reaction-haha:before {
+    content: "\f118";
+    padding:10px;
+}
+
+.reaction-sad:before {
+    content: "\f119";
+    padding:10px;
+}
+
+.reaction-thankful:before {
+    content: "\🌸";
+    padding:10px;
+}
+
+.reaction-pride:before {
+    content: "\🏳️‍🌈";
+    padding:10px;
+}

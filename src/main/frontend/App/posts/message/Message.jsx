@@ -4,6 +4,7 @@ import reactStringReplace from 'react-string-replace';
 import moment from 'moment';
 import moment_se from 'moment/locale/sv';
 import CountTo from './counter/CountTo';
+import '../../../style/reactions.scss';
 
 
 export default class Message extends PureComponent {
@@ -72,18 +73,11 @@ export default class Message extends PureComponent {
         );
     }
 
-    getReactionIcon(reactionType) {
-        return (<i className={`fa fa-${reactionType.toString().toLowerCase()}`}/>);
-
-    }
-
     getReactions() {
-
         return (this.props.post.reactions.map((reaction, i) => {
-
                 return <span className="reactions" key={i}>
                     <span>
-                        {this.getReactionIcon(Object.keys(reaction))}
+                        <i className={`fa reaction-${Object.keys(reaction).toString().toLowerCase()}`}/>
                        </span>
                     <CountTo to={Object.values(reaction)} speed={3000}>
                     </CountTo>
