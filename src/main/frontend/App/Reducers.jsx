@@ -37,8 +37,29 @@ export const feedReducer = (state = {}, action) => {
     }
 };
 
+export const mapReducer = (state = {}, action) => {
+    switch (action.type) {
+        case actionTypes.maps.GET_GEOLOCATION:
+            return {
+                ...state,
+                locations: {
+                    ...state.locations,
+                    [action.postId]: action.location
+                }
+            };
+        case actionTypes.feed.UPDATE_LATEST:
+            return {
+                ...state,
+                locations: {}
+            };
+        default:
+            return state;
+    }
+};
+
 export const reducers = combineReducers({
-    feed: feedReducer
+    feed: feedReducer,
+    map: mapReducer
 });
 
 

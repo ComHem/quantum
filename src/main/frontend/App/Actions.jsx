@@ -12,6 +12,12 @@ export const updateLatest = (postsType) => ({
     postsType
 });
 
+export const fetchLocation = (postId, location) => ({
+    type: actionTypes.maps.GET_GEOLOCATION,
+    postId,
+    location
+});
+
 export const fetchFeed = (type) => {
     const fetchFeedInner = () => {
         const URL = '/api/feed';
@@ -27,3 +33,24 @@ export const fetchFeed = (type) => {
 
 export const latestFeed = (postsType) => (dispatch) =>
     dispatch(updateLatest(postsType));
+
+export const fetchCityLocation = (post) => {
+    const fetchCityLocationInner = () => {
+        const url = `http://maps.googleapis.com/maps/api/geocode/json?address=${post.place}&sensor=false`;
+
+        return fetch(url, {method: 'GET'}).then(response => response.json());
+    };
+
+    return (dispatch) => {
+        return fetchCityLocationInner().then((response) => {
+            let location = [0, 0];
+            if (response && response.status === "OK" && response.results[0].geometry.location) {
+                location = [
+                    response.results[0].geometry.location.lat,
+                    response.results[0].geometry.location.lng
+                ];
+            }
+            dispatch(fetchLocation(post.id, location));
+        });
+    };
+};

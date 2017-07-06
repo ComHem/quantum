@@ -1,5 +1,7 @@
 @import "colors";
 
+$smallText: 11pt;
+
 @mixin border_on_post_children($color) {
   color: $color;
   .message--item__single--content, .message--item__thread--content, .message-thread__children--container {
@@ -86,10 +88,7 @@
     background-color: darken($comhem_gray, 5%);
   }
 
-  &:nth-child(1 .thread-replies) {
-    border: none;
-  }
-
+  //REPLIES
   .thread-replies {
     padding: 10px;
     border-bottom: 1px solid fade_out($bg_color, 0.5);
@@ -100,6 +99,18 @@
 
     .thread__message {
       padding: 5px;
+    }
+
+    .message--item__description {
+      display: inline-block;
+      position: absolute;
+      margin-top: 2px;
+      font-size: $smallText;
+      right: 10px;
+    }
+
+    .thread-author {
+      font-size: $smallText;
     }
 
     .thread-overflow {
@@ -155,10 +166,6 @@
       .author-name {
         font-style: normal;
       }
-
-      .date {
-        color: fade_out($color_black, 0.3);
-      }
     }
   }
 
@@ -175,8 +182,11 @@
 
 .author-name, .thread-author {
   font-weight: 900;
-  font-style: italic;
   display: inline-block;
+}
+
+.date {
+  color: fade_out($comhem_color_2, 0.5);
 }
 .reactions{
     /*background: #fff;*/
