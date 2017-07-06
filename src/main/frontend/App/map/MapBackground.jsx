@@ -4,29 +4,43 @@ import {Map, Marker, TileLayer} from 'react-leaflet';
 import {divIcon} from 'leaflet';
 
 export class MapBackground extends React.Component {
-    calculateCoordinates = function (post) {
+    getGeoCoordinates(post) {
         if (!_.isEmpty(post.location)) {
-            return [post.location[0], post.location[1]];
-        }
-        if (this.props.map.locations[post.id]) {
+            return post.location;
+        } else if (!_.isEmpty(this.props.map.locations[post.id])) {
             return this.props.map.locations[post.id];
         }
-        else {
-            return [-5, -5];
-        }
-    };
+    }
 
     getLocationFromPlaceIfAvailable(post, nextProps) {
-        if (_.isEmpty(post.location) && !_.isEmpty(post.place) && !nextProps.map.locations[post.id]) {
+        if (_.isEmpty(post.location) && !_.isEmpty(post.place) && _.isEmpty(nextProps.map.locations[post.id])) {
             this.props.fetchCityLocation(post);
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        nextProps.feed.posts && nextProps.feed.posts.forEach((post) => {
-            this.getLocationFromPlaceIfAvailable(post, nextProps);
-            post.replies.forEach(reply => this.getLocationFromPlaceIfAvailable(post, nextProps));
-        });
+    componentWillUpdate(nextProps) {
+        if (this.props.feed.posts !== nextProps.feed.posts) {
+            nextProps.feed.posts.forEach((post, i) => {
+                this.getLocationFromPlaceIfAvailable(post, nextProps);
+                post.replies.forEach(reply => {
+                    console.info(i, reply);
+                    this.getLocationFromPlaceIfAvailable(reply, nextProps)
+                });
+            });
+        }
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextProps !== this.props;
+    }
+
+    renderMarker({position, key, icon}) {
+        return (
+            <Marker key={key}
+                    position={position}
+                    draggable={false}
+                    icon={icon}/>
+        );
     }
 
     render() {
@@ -48,28 +62,15 @@ export class MapBackground extends React.Component {
 
                 <TileLayer url='http://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png'/>
 
-                {this.props.feed.posts && this.props.feed.posts.map((post, i) => (
-                    <span>
-                        <Marker key={i}
-                                position={this.calculateCoordinates(post)}
-                                draggable={false}
-                                icon={parentMarkerIcon}/>
+                {this.props.feed.posts && this.props.feed.posts.map((post, i) => {
+                    let position = this.getGeoCoordinates(post);
 
-                        {post.replies && post.replies.map((reply, j) => {
-                                let commentIcon = divIcon({
-                                    className: `map-marker-icon map-marker-icon--${j + 1}`,
-                                    iconSize: [25, 41]
-                                });
-                                return (
-                                    <Marker key={`_${j}`}
-                                            position={this.calculateCoordinates(reply)}
-                                            draggable={false}
-                                            icon={commentIcon}/>
-                                )
-                            }
-                        )}
-                    </span>
-                ))}
+                    return position ? this.renderMarker({
+                        key: i,
+                        position: position,
+                        icon: parentMarkerIcon
+                    }) : null
+                })}
             </Map>
         );
     }

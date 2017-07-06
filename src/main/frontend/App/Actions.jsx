@@ -43,7 +43,7 @@ export const fetchCityLocation = (post) => {
 
     return (dispatch) => {
         return fetchCityLocationInner().then((response) => {
-            let location = [0, 0];
+            let location = null;
             if (response && response.status === "OK" && response.results[0].geometry.location) {
                 location = [
                     response.results[0].geometry.location.lat,

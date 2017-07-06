@@ -4,8 +4,7 @@ import {fetchCityLocation} from '../Actions';
 
 const mapStateToProps = (state, ownProps) => ({
     map: state.map,
-    feed: state.feed,
-    latestfeed: state.latestfeed
+    feed: state.feed
 });
 
 const mapDispatchToProps = {
