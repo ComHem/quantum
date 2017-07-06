@@ -49,8 +49,8 @@ export default class Posts extends PureComponent {
             <div className="posts-container">
                 {this.props.posts && <LoadingAnimation progress={this.props.progress}/>}
                 <Animation>
-                    {this.props.posts && this.props.posts.map((post, i) => (
-                            <Message key={Date.now() + i}
+                    {this.props.posts && this.props.posts.map(post => (
+                            <Message key={post.id}
                                      post={post}
                                      type={this.props.type}
                                      getPlatformIcon={this.getPlatformIcon}/>
