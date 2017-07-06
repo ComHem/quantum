@@ -18,12 +18,18 @@ export default class Message extends PureComponent {
     getStyledMessage(message = this.props.post.message) {
         const hashTags = /#([\w]+)/gi;
         const atTags = /@([\w]+)/gi;
+        const hrefs = /([\w]+:\/\/[\w-?&;#~=.\/@]+[\w\/])/gi;
+
         let hashReplace = reactStringReplace(message, hashTags, (match) => (
             <span className="hashtag">#{match}</span>
         ));
 
-        return reactStringReplace(hashReplace, atTags, (match) => (
+        let atReplace = reactStringReplace(hashReplace, atTags, (match) => (
             <span className="hashtag">@{match}</span>
+        ));
+
+        return reactStringReplace(atReplace, hrefs, (match) => (
+            <a className="hashtag" href={match}>{match}</a>
         ));
     }
 
@@ -74,17 +80,14 @@ export default class Message extends PureComponent {
     }
 
     getReactions() {
-        return (this.props.post.reactions.map((reaction, i) => {
-                return <span className="reactions" key={i}>
+        return (this.props.post.reactions.map((reaction, i) => (
+                <span className="reactions" key={i}>
                     <span>
                         <i className={`fa reaction-${Object.keys(reaction).toString().toLowerCase()}`}/>
-                       </span>
-                    <CountTo to={Object.values(reaction)} speed={3000}>
-                    </CountTo>
+                    </span>
+                    <CountTo to={Object.values(reaction)} speed={2000}/>
                 </span>
-
-
-            }
-        ))
+            ))
+        )
     }
 }
