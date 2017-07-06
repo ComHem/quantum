@@ -2,8 +2,10 @@ package se.comhem.quantum.integration.eventhub;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import com.microsoft.azure.eventhubs.EventData;
 import com.microsoft.azure.eventhubs.EventHubClient;
+import com.microsoft.azure.servicebus.ServiceBusException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,32 +37,32 @@ public class EventHubWriteService {
 
     public void send(List<Post> posts) {
         List<EventData> events = posts.stream()
-            .flatMap(this::serialize)
-            .map(this::createEvent)
+            .flatMap(this::createEvent)
             .collect(toList());
         if (events.isEmpty()) {
-            throw new RuntimeException("Failed to serialize all posts");
+            throw new RuntimeException("Failed to create events  all posts");
         }
-        eventHubWriteClient.send(events, partition)
-            .whenComplete((returnValue, throwable) -> {
-                if (throwable != null) {
-                    log.error("Failed to send events", throwable);
-                    throw new RuntimeException(throwable);
-                } else {
-                    log.info("Successfully sent {} events (based on {} posts)", events.size(), posts.size());
+        int numberOfSentEvents = Lists.partition(events, 10).stream()
+            .mapToInt(eventBatch -> {
+                try {
+                    eventHubWriteClient.sendSync(eventBatch, partition);
+                    return eventBatch.size();
+                } catch (ServiceBusException e) {
+                    log.error("Failed to send event batch", e);
+                    return 0;
                 }
-            });
+            }).sum();
+        log.info("Successfully sent {} events (based on {} posts)", numberOfSentEvents, posts.size());
     }
 
-    private EventData createEvent(byte[] data) {
-        EventData eventData = new EventData(data);
-        eventData.getProperties().put("serialVersionUID", Post.serialVersionUID);
-        return eventData;
-    }
-
-    private Stream<byte[]> serialize(Post post) {
+    private Stream<EventData> createEvent(Post post) {
         try {
-            return Stream.of(objectMapper.writeValueAsBytes(post));
+            byte[] bytes = objectMapper.writeValueAsBytes(post);
+            EventData eventData = new EventData(bytes);
+            eventData.getProperties().put("id", post.getId());
+            eventData.getProperties().put("platform", post.getPlatform().toString());
+            eventData.getProperties().put("serialVersionUID", Post.serialVersionUID);
+            return Stream.of(eventData);
         } catch (JsonProcessingException e) {
             log.error("Failed to serialize post: " + post.getId(), e);
             return Stream.empty();
