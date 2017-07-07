@@ -75,6 +75,14 @@ body {
   }
 }
 
+.brand-logo{
+  position:absolute;
+  left: 5px;
+  bottom: 5px;
+  color: fade_out($comhem_gray, 0.8);
+  font-size: 18pt;
+}
+
 .logo {
   width: 150px;
   height: 150px;

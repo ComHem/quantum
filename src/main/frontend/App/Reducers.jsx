@@ -1,10 +1,5 @@
-import {
-    applyMiddleware,
-    combineReducers,
-    createStore,
-} from 'redux';
-
-import {actionTypes} from './actionTypes';
+import {combineReducers} from "redux";
+import {actionTypes} from "./actionTypes";
 
 export const feedReducer = (state = {}, action) => {
     switch (action.type) {
@@ -57,9 +52,20 @@ export const mapReducer = (state = {}, action) => {
     }
 };
 
+
+export const brandReducer = (state = "", action) => {
+    switch (action.type) {
+        case actionTypes.SET_BRAND:
+            return action.brand;
+        default:
+            return state;
+    }
+};
+
 export const reducers = combineReducers({
     feed: feedReducer,
-    map: mapReducer
+    map: mapReducer,
+    brand: brandReducer
 });
 
 

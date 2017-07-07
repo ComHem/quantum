@@ -1,5 +1,4 @@
-import {actionTypes} from './actionTypes';
-import _ from 'lodash';
+import {actionTypes} from "./actionTypes";
 
 export const updateTwitter = (feed, postsType) => ({
     type: actionTypes.feed.UPDATE_FEED,
@@ -54,3 +53,11 @@ export const fetchCityLocation = (post) => {
         });
     };
 };
+
+export const fetchBrand = () => dispatch =>
+    fetch('/api/brand', {method: 'GET'})
+        .then(response => response.text())
+        .then(brand => dispatch({
+            type: actionTypes.SET_BRAND,
+            brand: brand
+        }));

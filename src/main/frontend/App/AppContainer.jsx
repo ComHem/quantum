@@ -1,12 +1,14 @@
 import {connect} from 'react-redux';
 import {App} from './App';
-import {getNewRows} from './Actions';
+import {fetchBrand} from './Actions';
 
 const mapStateToProps = (state, ownProps) => ({
-    ...state
+    brand: state.brand,
+    feed: state.feed
 });
 
 const mapDispatchToProps = {
+    fetchBrand
 };
 
 const AppContainer = connect(

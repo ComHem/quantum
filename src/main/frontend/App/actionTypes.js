@@ -6,5 +6,6 @@ export const actionTypes = {
     },
     maps: {
         "GET_GEOLOCATION": "GET_GEOLOCATION"
-    }
+    },
+    "SET_BRAND" : 'SET_BRAND'
 };
