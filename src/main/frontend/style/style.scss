@@ -52,20 +52,29 @@ body {
   box-sizing: border-box;
 }
 
+@keyframes background-transition {
+  0% {
+    background-position: 0 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
 .background-overlay-color {
   @mixin fade_background($color) {
-    background: linear-gradient(to bottom left, rgba(200, 200, 200, 0.25), fade_out($color, 0.75));
+    background: linear-gradient(270deg, rgba(200, 200, 200, 0.25), fade_out($color, 0.75));
+    -webkit-background-size: 200%;
+    background-size: 200%;
   }
-
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   height: 100%;
-  background: rgba(200, 200, 200, 0.25);
   z-index: 1;
-  transition: background 3s ease-in-out;
+  animation: background-transition 12s ease-in-out alternate infinite;
 
   &.facebook {
     @include fade_background($facebook_color);
@@ -75,8 +84,8 @@ body {
   }
 }
 
-.brand-logo{
-  position:absolute;
+.brand-logo {
+  position: absolute;
   left: 5px;
   bottom: 5px;
   color: fade_out($comhem_gray, 0.8);
@@ -105,7 +114,7 @@ body {
   60% {
     background-color: $comhem_color_4;
   }
-  80% {
+  70% {
     background-color: $comhem_color_5;
   }
   90% {
