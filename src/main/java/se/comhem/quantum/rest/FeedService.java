@@ -46,8 +46,7 @@ public class FeedService {
     }
 
     public FeedDto getFeed() {
-        Map<Boolean, List<PostDto>> posts = postsCache.getPosts().stream()
-            .filter(post -> post.getUpdateDate().isAfter(LocalDateTime.now().minusMonths(2)))
+        Map<Boolean, List<PostDto>> posts = postsCache.getPostsLast2Month().stream()
             .map(post -> modelMapper.map(post, PostDto.class))
             .collect(Collectors.partitioningBy(p -> p.getReplies() == null || p.getReplies().isEmpty()));
         return FeedDto.builder()

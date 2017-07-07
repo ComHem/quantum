@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import se.comhem.quantum.integration.mongo.PostService;
 import se.comhem.quantum.model.Post;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -28,8 +29,8 @@ public class PostsCache {
     }
 
     @Cacheable("posts")
-    public List<Post> getPosts() {
-        List<Post> posts = postService.findAll();
+    public List<Post> getPostsLast2Month() {
+        List<Post> posts = postService.getUpdatedAfter(LocalDateTime.now().minusMonths(2));
         Collections.shuffle(posts, new Random(System.currentTimeMillis()));
         return posts;
     }
