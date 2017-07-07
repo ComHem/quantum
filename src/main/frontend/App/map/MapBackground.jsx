@@ -53,7 +53,7 @@ export class MapBackground extends PureComponent {
                  zoomControl={false}
                  scrollWheelZoom={false}>
 
-                <TileLayer url='http://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png'/>
+                <TileLayer url='http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'/>
 
                 {this.props.feed.posts && this.props.feed.posts.map((post, i) => {
                     let position = this.getGeoCoordinates(post);
