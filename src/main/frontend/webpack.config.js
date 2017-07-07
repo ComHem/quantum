@@ -13,7 +13,7 @@ const common = {
     ],
     output: {
         path: PATHS.output,
-        publicPath: 'http://localhost:9090/',
+        publicPath: '',
         filename: 'bundle.js'
     },
     module: {
