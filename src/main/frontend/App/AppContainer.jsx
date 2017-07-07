@@ -3,6 +3,7 @@ import {App} from './App';
 import {getNewRows} from './Actions';
 
 const mapStateToProps = (state, ownProps) => ({
+    ...state
 });
 
 const mapDispatchToProps = {

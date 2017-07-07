@@ -2,7 +2,6 @@ import React, {PureComponent} from 'react';
 import ThreadReplies from './thread-replies/ThreadReplies';
 import reactStringReplace from 'react-string-replace';
 import moment from 'moment';
-import _ from 'lodash';
 import CountTo from './counter/CountTo';
 import '../../../style/reactions.scss';
 
@@ -61,7 +60,10 @@ export default class Message extends PureComponent {
                             </p>
                         </div>
                     </div>
-                    <img src={this.props.post.contentLink}/>
+                    {this.props.post.contentLink &&
+                    <div className="message--item__content-image">
+                        <img src={this.props.post.contentLink}/>
+                    </div>}
                 </div>
 
                 {this.props.post.replies && this.props.post.replies.length ?
