@@ -6,4 +6,4 @@ metadata:
 data:
   QUANTUM_BRAND: "Boxer"
   QUANTUM_FB_PAGE: boxersverige
-  QUANTUM_TWITTER_QUERIES: #BoxerSverige;#Boxer;@boxersverige;@boxer;BoxerSverige;Boxer;to:BoxerSverige;from:BoxerSverige
+  QUANTUM_TWITTER_QUERIES: #BoxerSverige;@boxersverige;BoxerSverige;to:BoxerSverige;from:BoxerSverige
