@@ -11,6 +11,7 @@ security:
     enabled: false
 
 quantum:
+  brand: ${QUANTUM_BRAND:"Com Hem"}
   mongo:
     connectionString: ${QUANTUM_MONGO_CONNECTION_STRING}
   eventhub:
