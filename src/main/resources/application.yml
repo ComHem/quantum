@@ -5,6 +5,9 @@ spring:
     default-property-inclusion: non_null
     deserialization:
       fail-on-unknown-properties: false
+  mvc:
+    favicon:
+      enabled: false
 
 security:
   basic:
