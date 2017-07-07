@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import se.comhem.quantum.integration.eventhub.EventHubWriteService;
 import se.comhem.quantum.integration.facebook.FacebookService;
+import se.comhem.quantum.integration.mongo.PostService;
 import se.comhem.quantum.integration.twitter.TwitterService;
 import se.comhem.quantum.model.Post;
 
@@ -30,13 +31,15 @@ public class PostsExporter {
     private final FacebookService facebookService;
     private final TwitterService twitterService;
     private final PostsCache postsCache;
+    private final PostService postService;
 
     @Autowired
-    public PostsExporter(EventHubWriteService eventHubWriteService, FacebookService facebookService, TwitterService twitterService, PostsCache postsCache) {
+    public PostsExporter(EventHubWriteService eventHubWriteService, FacebookService facebookService, TwitterService twitterService, PostsCache postsCache, PostService postService) {
         this.eventHubWriteService = eventHubWriteService;
         this.facebookService = facebookService;
         this.twitterService = twitterService;
         this.postsCache = postsCache;
+        this.postService = postService;
     }
 
     @PostConstruct
@@ -53,13 +56,15 @@ public class PostsExporter {
         log.info("Export latest posts...");
         List<Post> facebookPosts = facebookService.getLatestPosts(50);
         List<Post> tweets = twitterService.getTweets(100);
+        log.info("Found {} facebook posts and {} tweets", facebookPosts.size(), tweets.size());
         Map<String, Post> postsCached = postsCache.getPosts().stream().collect(Collectors.toMap(Post::getKey, p -> p));
 
         List<Post> postsToExport = Stream.concat(filterExport(facebookPosts, postsCached), filterExport(tweets, postsCached))
             .sorted(Comparator.comparing(Post::getUpdateDate))
             .collect(toList());
         eventHubWriteService.send(postsToExport);
-        log.info("Exported {} facebook posts and {} tweets", facebookPosts.size(), tweets.size());
+        postService.save(postsToExport);
+        log.info("Exported {} posts", postsToExport.size());
 
         postsCache.evictCache();
         List<Post> newPostsCached = postsCache.getPosts();

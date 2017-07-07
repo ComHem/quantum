@@ -20,7 +20,7 @@ import static java.lang.String.format;
 @NoArgsConstructor
 @Builder
 public class Post {
-    public static final Long serialVersionUID = 11L;
+    public static final Long serialVersionUID = 12L;
 
     private String id;
     private LocalDateTime date;

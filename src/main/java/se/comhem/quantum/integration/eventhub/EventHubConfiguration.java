@@ -16,23 +16,14 @@ import java.security.NoSuchAlgorithmException;
 public class EventHubConfiguration {
 
     private final String writeClientConnectionString;
-    private final String readClientConnectionString;
 
-    EventHubConfiguration(@Value("${quantum.eventhub.writeConnectionString}") String writeClientConnectionString,
-                          @Value("${quantum.eventhub.readConnectionString}") String readClientConnectionString) {
+    EventHubConfiguration(@Value("${quantum.eventhub.writeConnectionString}") String writeClientConnectionString) {
         this.writeClientConnectionString = writeClientConnectionString;
-        this.readClientConnectionString = readClientConnectionString;
     }
 
     @Bean(name = "eventHubWriteClient")
     EventHubClient eventHubWriteClient() throws IOException, ServiceBusException, InvalidKeyException, NoSuchAlgorithmException {
         log.info("Configuring EventHub write client");
         return EventHubClient.createFromConnectionStringSync(writeClientConnectionString);
-    }
-
-    @Bean(name = "eventHubReadClient")
-    EventHubClient eventHubReadClient() throws IOException, ServiceBusException, InvalidKeyException, NoSuchAlgorithmException {
-        log.info("Configuring EventHub read client");
-        return EventHubClient.createFromConnectionStringSync(readClientConnectionString);
     }
 }
