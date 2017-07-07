@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import '../../style/map.scss';
 import {Map, Marker, TileLayer} from 'react-leaflet';
 import {divIcon} from 'leaflet';
 
-export class MapBackground extends React.Component {
+export class MapBackground extends PureComponent {
     getGeoCoordinates(post) {
         if (!_.isEmpty(post.location)) {
             return post.location;
@@ -20,18 +20,10 @@ export class MapBackground extends React.Component {
 
     componentWillUpdate(nextProps) {
         if (this.props.feed.posts !== nextProps.feed.posts) {
-            nextProps.feed.posts.forEach((post, i) => {
+            nextProps.feed.posts.forEach((post) => {
                 this.getLocationFromPlaceIfAvailable(post, nextProps);
-                post.replies.forEach(reply => {
-                    console.info(i, reply);
-                    this.getLocationFromPlaceIfAvailable(reply, nextProps)
-                });
             });
         }
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        return nextProps !== this.props;
     }
 
     renderMarker({position, key, icon}) {
@@ -46,6 +38,7 @@ export class MapBackground extends React.Component {
     render() {
         const parentMarkerIcon = divIcon({
             className: 'map-marker-icon',
+            iconAnchor: [12.5, 41],
             iconSize: [25, 41]
         });
         const defaultMapPosition = {
