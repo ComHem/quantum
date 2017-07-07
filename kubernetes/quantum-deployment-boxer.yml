@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: quantum-deployment
+  name: quantum-deployment-boxer
 spec:
   replicas: 2
   strategy:
@@ -12,16 +12,16 @@ spec:
   template:
     metadata:
       labels:
-        app: quantum
+        app: quantum-boxer
     spec:
       containers:
-      - name: quantum
-        image: mimerdevcontainerregistry.azurecr.io/quantum:v2
+      - name: quantum-boxer
+        image: mimerdevcontainerregistry.azurecr.io/quantum:b5422929
         ports:
         - containerPort: 8080
         imagePullPolicy: Always
         envFrom:
         - secretRef:
-            name: quantum-secrets
+            name: quantum-secrets-boxer
         - configMapRef:
-            name: quantum-configmap
+            name: quantum-configmap-boxer

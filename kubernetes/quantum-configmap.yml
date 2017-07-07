@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: quantum-configmap
+  namespace: default
+data:
+  QUANTUM_FB_PAGE: comhem
+  QUANTUM_TWITTER_QUERIES: "#comhem;#comhemab;@comhemab;comhemab;comhem;@comhem;to:comhemab;from:comhemab"
