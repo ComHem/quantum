@@ -65,7 +65,7 @@ body {
   height: 100%;
   background: rgba(200, 200, 200, 0.25);
   z-index: 1;
-  transition: background ease-in-out 2s;
+  transition: background 3s ease-in-out;
 
   &.facebook {
     @include fade_background($facebook_color);

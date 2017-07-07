@@ -92,7 +92,7 @@ $smallText: 11pt;
     width: 40%;
     max-height: 100%;
     overflow: hidden;
-    background-color: darken($comhem_gray, 5%);
+    background-color: darken($comhem_gray, 4%);
   }
 
   //REPLIES
@@ -159,7 +159,7 @@ $smallText: 11pt;
       display: block;
       width: 70px;
       border-radius: 50%;
-      animation: author-icon-animation 6s alternate infinite ease-in-out;
+      animation: author-icon-animation 4s alternate infinite ease-in-out;
 
       @keyframes author-icon-animation {
         from {
