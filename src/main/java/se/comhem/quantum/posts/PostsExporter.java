@@ -12,6 +12,7 @@ import se.comhem.quantum.integration.twitter.TwitterService;
 import se.comhem.quantum.model.Post;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class PostsExporter {
     @PostConstruct
     private void postConstruct() {
         log.info("Loading initial posts...");
-        List<Post> posts = postsCache.getPosts();
+        List<Post> posts = postsCache.getPostsLast2Month();
         if (posts.isEmpty()) {
             exportLatestPosts();
         }
@@ -57,9 +58,10 @@ public class PostsExporter {
         List<Post> facebookPosts = facebookService.getLatestPosts(50);
         List<Post> tweets = twitterService.getTweets(100);
         log.info("Found {} facebook posts and {} tweets", facebookPosts.size(), tweets.size());
-        Map<String, Post> postsCached = postsCache.getPosts().stream().collect(Collectors.toMap(Post::getKey, p -> p));
+        Map<String, Post> postsCached = postsCache.getPostsLast2Month().stream().collect(Collectors.toMap(Post::getKey, p -> p));
 
         List<Post> postsToExport = Stream.concat(filterExport(facebookPosts, postsCached), filterExport(tweets, postsCached))
+            .filter(post -> post.getUpdateDate().isAfter(LocalDateTime.now().minusMonths(1)))
             .sorted(Comparator.comparing(Post::getUpdateDate))
             .collect(toList());
         eventHubWriteService.send(postsToExport);
@@ -67,7 +69,7 @@ public class PostsExporter {
         log.info("Exported {} posts", postsToExport.size());
 
         postsCache.evictCache();
-        List<Post> newPostsCached = postsCache.getPosts();
+        List<Post> newPostsCached = postsCache.getPostsLast2Month();
         log.info("Cache updated with {} posts/tweets", newPostsCached.size());
     }
 
