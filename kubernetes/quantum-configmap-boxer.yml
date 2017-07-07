@@ -4,5 +4,6 @@ metadata:
   name: quantum-configmap-boxer
   namespace: default
 data:
+  QUANTUM_BRAND: "Boxer"
   QUANTUM_FB_PAGE: boxersverige
   QUANTUM_TWITTER_QUERIES: #BoxerSverige;#Boxer;@boxersverige;@boxer;BoxerSverige;Boxer;to:BoxerSverige;from:BoxerSverige
