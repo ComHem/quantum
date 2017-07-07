@@ -63,18 +63,18 @@ body {
 
 .background-overlay-color {
   @mixin fade_background($color) {
-    background: linear-gradient(270deg, rgba(200, 200, 200, 0.25), fade_out($color, 0.75));
-    -webkit-background-size: 200%;
-    background-size: 200%;
+    background: fade_out($color, 0.70);
   }
+
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   height: 100%;
+  background: rgba(200, 200, 200, 0.25);
   z-index: 1;
-  animation: background-transition 12s ease-in-out alternate infinite;
+  transition: all 3s ease;
 
   &.facebook {
     @include fade_background($facebook_color);
@@ -92,13 +92,6 @@ body {
   font-size: 18pt;
 }
 
-.logo {
-  width: 150px;
-  height: 150px;
-  display: block;
-  margin: 0 auto;
-}
-
 //Loading animation
 @keyframes progress-animation {
   0% {
@@ -114,7 +107,7 @@ body {
   60% {
     background-color: $comhem_color_4;
   }
-  70% {
+  80% {
     background-color: $comhem_color_5;
   }
   90% {
@@ -145,4 +138,8 @@ body {
     border-bottom: 1px solid rgba(250, 250, 250, 0.3);
     box-shadow: -2px 2px 10px fade_out($color_black, 0.5);
   }
+}
+
+.leaflet-control-attribution {
+  display: none !important;
 }
