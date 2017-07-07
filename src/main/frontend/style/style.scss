@@ -63,7 +63,7 @@ body {
 
 .background-overlay-color {
   @mixin fade_background($color) {
-    background: fade_out($color, 0.70);
+    background: fade_out($color, 0.75);
   }
 
   position: absolute;
