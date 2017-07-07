@@ -37,6 +37,6 @@ kubectl set image deployment/quantum-deployment quantum=${image} --record && \
 kubectl rollout status deployment/quantum-deployment && \
 echo "Deploying quantum for Boxer..." && \
 kubectl apply -f kubernetes/quantum-configmap-boxer.yml --record && \
-kubectl set image deployment/quantum-deployment-boxer quantum=${image} --record && \
+kubectl set image deployment/quantum-deployment-boxer quantum-boxer=${image} --record && \
 kubectl rollout status deployment/quantum-deployment-boxer && \
 echo Deployed ${image} to kubernetes cluster
