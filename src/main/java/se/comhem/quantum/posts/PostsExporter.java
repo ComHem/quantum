@@ -52,7 +52,7 @@ public class PostsExporter {
         }
     }
 
-    @Scheduled(initialDelay = FIFTEEN_MINUTES, fixedDelay = FIFTEEN_MINUTES)
+    @Scheduled(initialDelay = 1000, fixedDelay = FIFTEEN_MINUTES)
     public void exportLatestPosts() {
         log.info("Export latest posts...");
         List<Post> facebookPosts = facebookService.getLatestPosts(50);
@@ -64,13 +64,14 @@ public class PostsExporter {
             .filter(post -> post.getUpdateDate().isAfter(LocalDateTime.now().minusMonths(1)))
             .sorted(Comparator.comparing(Post::getUpdateDate))
             .collect(toList());
-        eventHubWriteService.send(postsToExport);
-        postService.save(postsToExport);
-        log.info("Exported {} posts", postsToExport.size());
-
-        postsCache.evictCache();
-        List<Post> newPostsCached = postsCache.getPostsLast2Month();
-        log.info("Cache updated with {} posts/tweets", newPostsCached.size());
+        if (!postsToExport.isEmpty()) {
+            eventHubWriteService.send(postsToExport);
+            postService.save(postsToExport);
+            log.info("Exported {} posts", postsToExport.size());
+            postsCache.evictCache();
+            List<Post> newPostsCached = postsCache.getPostsLast2Month();
+            log.info("Cache updated with {} posts/tweets", newPostsCached.size());
+        }
     }
 
     private Stream<Post> filterExport(List<Post> newPosts, Map<String, Post> postsCached) {

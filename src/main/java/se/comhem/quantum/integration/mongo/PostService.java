@@ -3,6 +3,7 @@ package se.comhem.quantum.integration.mongo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.comhem.quantum.model.Post;
+import se.comhem.quantum.model.PostMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
