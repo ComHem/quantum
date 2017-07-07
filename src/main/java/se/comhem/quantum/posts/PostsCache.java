@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import se.comhem.quantum.integration.eventhub.EventHubReadService;
+import se.comhem.quantum.integration.mongo.PostService;
 import se.comhem.quantum.model.Post;
 
 import java.util.Collections;
@@ -16,19 +16,20 @@ import java.util.Random;
 @Slf4j
 public class PostsCache {
 
-    private final EventHubReadService eventHubReadService;
+    private final PostService postService;
 
     @Autowired
-    public PostsCache(EventHubReadService eventHubReadService) {
-        this.eventHubReadService = eventHubReadService;
+    public PostsCache(PostService postService) {
+        this.postService = postService;
     }
 
     @CacheEvict(value = "posts", allEntries = true)
-    public void evictCache() { }
+    public void evictCache() {
+    }
 
     @Cacheable("posts")
     public List<Post> getPosts() {
-        List<Post> posts = eventHubReadService.read();
+        List<Post> posts = postService.findAll();
         Collections.shuffle(posts, new Random(System.currentTimeMillis()));
         return posts;
     }
