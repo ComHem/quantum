@@ -29,6 +29,7 @@ public class Post {
     private String message;
     private String messageImg;
     private String author;
+    private String authorId;
     private String authorImg;
     private String contentLink;
     private String place;

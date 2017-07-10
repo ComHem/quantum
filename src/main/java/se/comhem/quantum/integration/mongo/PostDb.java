@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import se.comhem.quantum.model.Platform;
-import se.comhem.quantum.model.Post;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,10 +20,11 @@ public class PostDb {
     private String message;
     private String messageImg;
     private String author;
+    private String authorId;
     private String authorImg;
     private String contentLink;
     private String place;
     private List<Double> location;
     private Map<String, Long> reactions;
-    private List<Post> replies;
+    private List<PostDb> replies;
 }

@@ -81,6 +81,7 @@ public class TwitterService {
             .id(String.valueOf(status.getId()))
             .message(status.getText())
             .author(status.getUser().getName())
+            .authorId(String.valueOf(status.getUser().getId()))
             .authorImg(status.getUser().getBiggerProfileImageURL())
             .place(status.getPlace() != null ? status.getPlace().getFullName() : status.getUser().getLocation())
             .location(getGeo(status))

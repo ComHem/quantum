@@ -23,7 +23,7 @@ public class FeedService {
 
     public FeedDto getFeed() {
         Map<Boolean, List<PostDto>> posts = postsCache.getPostsLast2Month().stream()
-            .map(post -> postMapper.mapToPostDto(post))
+            .map(postMapper::mapToPostDto)
             .collect(Collectors.partitioningBy(p -> p.getReplies() == null || p.getReplies().isEmpty()));
         return FeedDto.builder()
             .singles(posts.get(Boolean.TRUE))
