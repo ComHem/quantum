@@ -51,4 +51,8 @@ public class PostMapper {
     public Post mapToPost(PostDb post) {
         return modelMapper.map(post, Post.class);
     }
+
+    public void validate() {
+        modelMapper.validate();
+    }
 }
