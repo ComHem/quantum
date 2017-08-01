@@ -5,7 +5,10 @@ Maven and Webpack as build tools, hot reloading on both sides and without xml co
 
 ## Production
 
-App can be reached here --> http://52.166.144.86/
+App can be reached here -->
+Com Hem:  http://52.166.144.86/
+Boxer : http://52.166.1.243/
+
 ## Status
 
 Travis CI:
