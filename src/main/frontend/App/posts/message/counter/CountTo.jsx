@@ -97,9 +97,9 @@ class CountTo extends Component {
 
         return (
 
-                <Tag className={className}>
-                    {value}
-                </Tag>
+            <Tag className={className}>
+                {value}
+            </Tag>
         );
     }
 }
