@@ -23,3 +23,9 @@ deploy:
     script: ./scripts/deploy.sh ${TRAVIS_BRANCH} ${TRAVIS_COMMIT::8}
     on:
       branch: master
+notifications:
+  email:
+    recipients:
+      - ${NOTIFICATION_EMAIL}
+    on_success: never
+    on_failure: always
