@@ -152,12 +152,14 @@ $smallText: 11pt;
 
     .author--icon__pull-left {
       width: 70px;
+      height: 70px;
       display: inline-block;
     }
 
     .author-icon {
       display: block;
       width: 70px;
+      height: 70px;
       border-radius: 50%;
       animation: author-icon-animation 4s alternate infinite ease-in-out;
 
