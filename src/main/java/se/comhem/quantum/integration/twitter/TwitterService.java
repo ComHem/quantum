@@ -18,7 +18,6 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -51,7 +51,7 @@ public class TwitterService {
         long start = System.currentTimeMillis();
         List<Status> tweets = fetchData(numberOfTweetsPerQuery);
         Map<Long, List<Status>> tweetsByReplyId = tweets.stream().distinct().collect(groupingBy(Status::getInReplyToStatusId));
-        List<Post> posts = tweetsByReplyId.get(TOP_LEVEL_TWEETS).stream()
+        List<Post> posts = tweetsByReplyId.getOrDefault(TOP_LEVEL_TWEETS, emptyList()).stream()
             .map(status -> mapStatus(status, tweetsByReplyId))
             .collect(toList());
         log.info("Took {} ms to fetch {} tweets", System.currentTimeMillis() - start, posts.size());
@@ -89,7 +89,7 @@ public class TwitterService {
             .platform(Platform.TWITTER)
             .date(DateUtils.fromDate(status.getCreatedAt()))
             .updateDate(DateUtils.fromDate(status.getCreatedAt()))
-            .replies(tweetsByReplyId.getOrDefault(status.getId(), Collections.emptyList()).stream()
+            .replies(tweetsByReplyId.getOrDefault(status.getId(), emptyList()).stream()
                 .map(reply -> mapStatus(reply, tweetsByReplyId))
                 .collect(toList()))
             .reactions(ImmutableMap.of(
