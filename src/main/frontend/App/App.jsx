@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Posts from './posts/PostsContainer';
 import MapBackground from './map/MapContainer';
-import x from '../img/Quantum_text_vit.svg';
+import logo from '../img/Quantum_text_vit.svg';
 
 export class App extends Component {
     componentDidMount() {
@@ -20,7 +20,7 @@ export class App extends Component {
 
                 <div className={`background-overlay-color ${this.setPlatform()}`}/>
                 <div className="left--feed">
-                    <img className="quantum-logo" src={x} alt="Kiwi standing on oval"></img>
+                    <img className="quantum-logo" src={logo} alt="Kiwi standing on oval"></img>
                     <div className="brand-logo">{this.props.brand}</div>
                     <Posts />
                 </div>
