@@ -17,7 +17,6 @@ export class App extends Component {
     render() {
         return (
             <div className="main">
-
                 <div className={`background-overlay-color ${this.setPlatform()}`}/>
                 <div className="left--feed">
                     <img className="quantum-logo" src={logo} alt="Kiwi standing on oval"></img>
