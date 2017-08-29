@@ -16,7 +16,19 @@ spec:
     spec:
       containers:
       - name: quantum-boxer
-        image: mimerdevcontainerregistry.azurecr.io/quantum:b5422929
+        image: mimerdevcontainerregistry.azurecr.io/quantum:aafeedda
+        livenessProbe:
+              httpGet:
+                path: /health
+                port: 8080
+              initialDelaySeconds: 30
+              timeoutSeconds: 1
+        readinessProbe:
+              httpGet:
+                path: /health
+                port: 8080
+              initialDelaySeconds: 30
+              timeoutSeconds: 1
         ports:
         - containerPort: 8080
         imagePullPolicy: Always
