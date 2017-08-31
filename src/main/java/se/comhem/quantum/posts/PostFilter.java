@@ -9,6 +9,9 @@ class PostFilter {
     
     static boolean newOrUpdatedPost(Post newPost, Map<String, Post> postsCached) {
         Post post = postsCached.get(newPost.getKey());
-        return post == null || !Objects.equals(post.getUpdateDate(), newPost.getUpdateDate());
+        return post == null
+            || !Objects.equals(post.getUpdateDate(), newPost.getUpdateDate())
+            || !Objects.equals(post.getReactions().size(), newPost.getReactions().size())
+            || !Objects.equals(post.getReplies().size(), newPost.getReplies().size());
     }
 }

@@ -12,7 +12,6 @@ import se.comhem.quantum.integration.twitter.TwitterService;
 import se.comhem.quantum.model.Post;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +60,6 @@ public class PostsExporter {
         Map<String, Post> postsCached = postsCache.getPostsLast2Month().stream().collect(Collectors.toMap(Post::getKey, p -> p));
 
         List<Post> postsToExport = Stream.concat(filterExport(facebookPosts, postsCached), filterExport(tweets, postsCached))
-            .filter(post -> post.getUpdateDate().isAfter(LocalDateTime.now().minusMonths(1)))
             .sorted(Comparator.comparing(Post::getUpdateDate))
             .collect(toList());
         if (!postsToExport.isEmpty()) {

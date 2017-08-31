@@ -26,7 +26,7 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class FacebookService {
 
-    private static final String FIELDS = "hometown,location,created_time,updated_time,message,comments,properties,reactions,tags,picture,fullPicture,story,storyTags,whiteTags,place,link,name,to,from,icon,actions,sharesCount,statusType,attachments,parentId,user_location,user_hometown";
+    private static final String FIELDS = "hometown,location,created_time,updated_time,message,comments.limit(1000),properties,reactions.limit(1000),tags,picture,fullPicture,story,storyTags,whiteTags,place,link,name,to,from,icon,actions,sharesCount,statusType,attachments,parentId,user_location,user_hometown";
     private final Facebook facebook;
     private final String page;
 
@@ -55,6 +55,8 @@ public class FacebookService {
     private Reading options(int numberOfPosts) {
         return new Reading()
             .limit(numberOfPosts)
+            .filter("stream")
+            .summary()
             .order(Ordering.REVERSE_CHRONOLOGICAL)
             .fields(FIELDS);
     }
