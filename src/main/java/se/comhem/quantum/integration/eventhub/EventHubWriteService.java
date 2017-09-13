@@ -2,7 +2,6 @@ package se.comhem.quantum.integration.eventhub;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
 import com.microsoft.azure.eventhubs.EventData;
 import com.microsoft.azure.eventhubs.EventHubClient;
 import com.microsoft.azure.servicebus.ServiceBusException;
@@ -21,6 +20,7 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class EventHubWriteService {
 
+    public static final int MAX_MESSAGE_SIZE = 1024 * 256;
     private final EventHubClient eventHubWriteClient;
     private final ObjectMapper objectMapper;
 
@@ -34,21 +34,30 @@ public class EventHubWriteService {
     public void send(List<Post> posts) {
         List<EventData> events = posts.stream()
             .flatMap(this::createEvent)
+            .filter(this::withinMessageSizeLimit)
             .collect(toList());
         if (events.isEmpty()) {
             throw new RuntimeException("Failed to create events  all posts");
         }
-        int numberOfSentEvents = Lists.partition(events, 10).stream()
-            .mapToInt(eventBatch -> {
+        int numberOfSentEvents = events.stream()
+            .mapToInt(event -> {
                 try {
-                    eventHubWriteClient.sendSync(eventBatch);
-                    return eventBatch.size();
+                    eventHubWriteClient.sendSync(event);
+                    return 1;
                 } catch (ServiceBusException e) {
                     log.error("Failed to send event batch", e);
                     return 0;
                 }
             }).sum();
         log.info("Successfully sent {} events (based on {} posts)", numberOfSentEvents, posts.size());
+    }
+
+    private boolean withinMessageSizeLimit(EventData eventData) {
+        if (eventData.getBytes().length > MAX_MESSAGE_SIZE) {
+            log.warn("Message for post '{}' exceeded max size, will be skipped.", eventData.getProperties().get("id"));
+            return false;
+        }
+        return true;
     }
 
     private Stream<EventData> createEvent(Post post) {
