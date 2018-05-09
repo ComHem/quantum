@@ -1,5 +1,6 @@
 package se.comhem.quantum.integration.facebook;
 
+import facebook4j.Category;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import facebook4j.Ordering;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
@@ -83,13 +85,17 @@ public class FacebookService {
                     .id(comment.getId())
                     .platform(Platform.FACEBOOK)
                     .message(comment.getMessage())
-                    .author(comment.getFrom().getName())
-                    .authorId(comment.getFrom().getId())
-                    .date(DateUtils.fromDate(comment.getCreatedTime()))
-                    .updateDate(DateUtils.fromDate(comment.getCreatedTime()))
+                    .author(getOrNull(comment::getFrom, Category::getName))
+                    .authorId(getOrNull(comment::getFrom, Category::getId))
+                    .date(getOrNull(comment::getCreatedTime, DateUtils::fromDate))
+                    .updateDate(getOrNull(comment::getCreatedTime, DateUtils::fromDate))
                     .build())
                 .collect(toList()))
             .build();
+    }
+
+    private static <T, R> R getOrNull(Supplier<T> initial, Function<T, R> mapper) {
+        return Optional.ofNullable(initial.get()).map(mapper).orElse(null);
     }
 
     private Map<String, Long> getReactions(facebook4j.Post post) {
