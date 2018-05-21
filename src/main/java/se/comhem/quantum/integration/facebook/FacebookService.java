@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
@@ -44,7 +45,7 @@ public class FacebookService {
         try {
             long start = System.currentTimeMillis();
             List<Post> posts = facebook.getPosts(page, options(numberOfPosts)).stream()
-                .map(this::mapFacebookPost)
+                .flatMap(this::mapFacebookPost)
                 .collect(toList());
             log.info("Took {} ms to fetch {} facebook posts", System.currentTimeMillis() - start, posts.size());
             return posts;
@@ -63,35 +64,40 @@ public class FacebookService {
             .fields(FIELDS);
     }
 
-    private Post mapFacebookPost(facebook4j.Post post) {
-        return Post.builder()
-            .id(post.getId())
-            .message(post.getMessage())
-            .author(post.getFrom().getName())
-            .authorId(post.getFrom().getId())
-            .authorImg(getProfilePicPath(post.getFrom().getId()))
-            .platform(Platform.FACEBOOK)
-            .reactions(getReactions(post))
-            .contentLink(Optional.ofNullable(post.getAttachments())
-                .flatMap(attachments -> attachments.stream()
-                    .findFirst()
-                    .map(facebook4j.Post.Attachment::getUrl))
-                .orElse(""))
-            .date(DateUtils.fromDate(post.getCreatedTime()))
-            .updateDate(DateUtils.fromDate(post.getUpdatedTime()))
-            .location(Arrays.asList(59.33319939999999, 18.0444084)) // TODO: Hardcoded to Stockholm right now
-            .replies(post.getComments().stream()
-                .map(comment -> Post.builder()
-                    .id(comment.getId())
-                    .platform(Platform.FACEBOOK)
-                    .message(comment.getMessage())
-                    .author(getOrNull(comment::getFrom, Category::getName))
-                    .authorId(getOrNull(comment::getFrom, Category::getId))
-                    .date(getOrNull(comment::getCreatedTime, DateUtils::fromDate))
-                    .updateDate(getOrNull(comment::getCreatedTime, DateUtils::fromDate))
-                    .build())
-                .collect(toList()))
-            .build();
+    private Stream<Post> mapFacebookPost(facebook4j.Post post) {
+        try {
+            return Stream.of(Post.builder()
+                .id(post.getId())
+                .message(post.getMessage())
+                .author(post.getFrom().getName())
+                .authorId(post.getFrom().getId())
+                .authorImg(getProfilePicPath(post.getFrom().getId()))
+                .platform(Platform.FACEBOOK)
+                .reactions(getReactions(post))
+                .contentLink(Optional.ofNullable(post.getAttachments())
+                    .flatMap(attachments -> attachments.stream()
+                        .findFirst()
+                        .map(facebook4j.Post.Attachment::getUrl))
+                    .orElse(""))
+                .date(DateUtils.fromDate(post.getCreatedTime()))
+                .updateDate(DateUtils.fromDate(post.getUpdatedTime()))
+                .location(Arrays.asList(59.33319939999999, 18.0444084)) // TODO: Hardcoded to Stockholm right now
+                .replies(post.getComments().stream()
+                    .map(comment -> Post.builder()
+                        .id(comment.getId())
+                        .platform(Platform.FACEBOOK)
+                        .message(comment.getMessage())
+                        .author(getOrNull(comment::getFrom, Category::getName))
+                        .authorId(getOrNull(comment::getFrom, Category::getId))
+                        .date(getOrNull(comment::getCreatedTime, DateUtils::fromDate))
+                        .updateDate(getOrNull(comment::getCreatedTime, DateUtils::fromDate))
+                        .build())
+                    .collect(toList()))
+                .build());
+        } catch (Exception e) {
+            log.error("Unhandled exception while mapping facebook post: " + post.getId(), e);
+            return Stream.empty();
+        }
     }
 
     private static <T, R> R getOrNull(Supplier<T> initial, Function<T, R> mapper) {

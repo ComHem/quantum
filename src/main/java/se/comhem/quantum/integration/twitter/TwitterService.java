@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -52,7 +53,7 @@ public class TwitterService {
         List<Status> tweets = fetchData(numberOfTweetsPerQuery);
         Map<Long, List<Status>> tweetsByReplyId = tweets.stream().distinct().collect(groupingBy(Status::getInReplyToStatusId));
         List<Post> posts = tweetsByReplyId.getOrDefault(TOP_LEVEL_TWEETS, emptyList()).stream()
-            .map(status -> mapStatus(status, tweetsByReplyId))
+            .flatMap(status -> mapStatus(status, tweetsByReplyId))
             .collect(toList());
         log.info("Took {} ms to fetch {} tweets", System.currentTimeMillis() - start, posts.size());
         return posts;
@@ -76,27 +77,32 @@ public class TwitterService {
             .collect(toList());
     }
 
-    private Post mapStatus(Status status, Map<Long, List<Status>> tweetsByReplyId) {
-        return Post.builder()
-            .id(String.valueOf(status.getId()))
-            .message(status.getText())
-            .author(status.getUser().getName())
-            .authorId(String.valueOf(status.getUser().getId()))
-            .authorImg(status.getUser().getBiggerProfileImageURL())
-            .place(status.getPlace() != null ? status.getPlace().getFullName() : status.getUser().getLocation())
-            .location(getGeo(status))
-            .contentLink(getMediaIfExists(status))
-            .platform(Platform.TWITTER)
-            .date(DateUtils.fromDate(status.getCreatedAt()))
-            .updateDate(DateUtils.fromDate(status.getCreatedAt()))
-            .replies(tweetsByReplyId.getOrDefault(status.getId(), emptyList()).stream()
-                .map(reply -> mapStatus(reply, tweetsByReplyId))
-                .collect(toList()))
-            .reactions(ImmutableMap.of(
-                "RETWEET", (long) status.getRetweetCount(),
-                "FAVORITE", (long) status.getFavoriteCount()
-            ))
-            .build();
+    private Stream<Post> mapStatus(Status status, Map<Long, List<Status>> tweetsByReplyId) {
+        try {
+            return Stream.of(Post.builder()
+                .id(String.valueOf(status.getId()))
+                .message(status.getText())
+                .author(status.getUser().getName())
+                .authorId(String.valueOf(status.getUser().getId()))
+                .authorImg(status.getUser().getBiggerProfileImageURL())
+                .place(status.getPlace() != null ? status.getPlace().getFullName() : status.getUser().getLocation())
+                .location(getGeo(status))
+                .contentLink(getMediaIfExists(status))
+                .platform(Platform.TWITTER)
+                .date(DateUtils.fromDate(status.getCreatedAt()))
+                .updateDate(DateUtils.fromDate(status.getCreatedAt()))
+                .replies(tweetsByReplyId.getOrDefault(status.getId(), emptyList()).stream()
+                    .flatMap(reply -> mapStatus(reply, tweetsByReplyId))
+                    .collect(toList()))
+                .reactions(ImmutableMap.of(
+                    "RETWEET", (long) status.getRetweetCount(),
+                    "FAVORITE", (long) status.getFavoriteCount()
+                ))
+                .build());
+        } catch (Exception e) {
+            log.error("Unhandled exception while mapping twitter post: " + status.getId(), e);
+            return Stream.empty();
+        }
     }
 
     private String getMediaIfExists(Status status) {
